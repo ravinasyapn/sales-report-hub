@@ -322,27 +322,30 @@ function ReportsPage() {
   };
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 space-y-6 print:p-0 print:space-y-4 reports-root">
+    <div className="p-5 sm:p-8 lg:p-12 max-w-6xl mx-auto space-y-8 print:p-0 print:space-y-4 print:max-w-none reports-root">
       <PrintStyles />
 
       {/* ============ Page header ============ */}
-      <div className="flex flex-wrap items-end justify-between gap-3 print:hidden">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-accent tracking-tight">
+      <header className="flex flex-wrap items-end justify-between gap-4 print:hidden">
+        <div className="space-y-2">
+          <div className="text-[10px] uppercase tracking-[0.22em] font-bold text-accent/70 flex items-center gap-2">
+            <FileBarChart className="w-3 h-3" /> Laporan
+          </div>
+          <h1 className="font-serif italic text-4xl sm:text-5xl font-extrabold text-accent leading-tight">
             Laporan Penjualan
           </h1>
-          <p className="text-sm text-foreground/60 mt-1">
+          <p className="text-sm text-foreground/70 max-w-xl">
             Audit kas, rekap event, dan restock produk — Gurita Bouquet.
           </p>
         </div>
         <button
           onClick={handlePrint}
-          className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold text-sm px-5 py-2.5 shadow-md hover:opacity-90 transition"
+          className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold text-sm px-5 py-3 shadow-md hover:opacity-90 transition"
         >
           <Printer className="w-4 h-4" />
           Print to PDF
         </button>
-      </div>
+      </header>
 
       {/* Print-only title block */}
       <div className="hidden print:block">
