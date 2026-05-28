@@ -62,26 +62,33 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --radius: 1.25rem;
+  /* Gurita Bouquet palette — pink, sage, burgundy, cream */
+  --background: oklch(0.88 0.055 14);           /* soft pink page */
+  --foreground: oklch(0.36 0.09 22);            /* burgundy text */
+  --card: oklch(0.98 0.025 105);                /* warm cream card */
+  --card-foreground: oklch(0.36 0.09 22);
+  --popover: oklch(0.98 0.025 105);
+  --popover-foreground: oklch(0.36 0.09 22);
+  --primary: oklch(0.66 0.11 125);              /* sage green button */
+  --primary-foreground: oklch(0.98 0.02 105);
+  --secondary: oklch(0.92 0.045 14);            /* pale pink */
+  --secondary-foreground: oklch(0.36 0.09 22);
+  --muted: oklch(0.95 0.035 95);                /* cream muted */
+  --muted-foreground: oklch(0.5 0.07 22);
+  --accent: oklch(0.4 0.105 22);                /* deep burgundy */
+  --accent-foreground: oklch(0.98 0.02 105);
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0.02 105);
+  --border: oklch(0.86 0.04 16);
+  --input: oklch(0.96 0.03 18);
+  --ring: oklch(0.66 0.11 125);
+  --brand-pink: oklch(0.88 0.055 14);
+  --brand-burgundy: oklch(0.4 0.105 22);
+  --brand-sage: oklch(0.66 0.11 125);
+  --brand-cream: oklch(0.97 0.05 105);
+  --brand-deep: oklch(0.4 0.105 22);
+  --shadow-card: 0 20px 50px -20px oklch(0.4 0.105 22 / 0.25);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -141,4 +148,36 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+/* Smooth, slim, branded scrollbars across the app */
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--accent) 35%, transparent) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--accent) 30%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s ease;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--accent) 55%, transparent);
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
 }
