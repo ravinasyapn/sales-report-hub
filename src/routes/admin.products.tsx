@@ -32,7 +32,7 @@ function ProductsPage() {
           Untuk sementara, tambahkan produk langsung dari aplikasi POS Kasir di bagian katalog.
         </p>
         <a
-          href="/dashboard"
+          href="https://github.com/ravinasyapn/gurita-pos"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-foreground font-bold text-sm hover:opacity-90 transition"
