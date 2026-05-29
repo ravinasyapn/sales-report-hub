@@ -19,7 +19,7 @@ const navTail = [
   { to: "/pos/settings", label: "Pengaturan", icon: SettingsIcon },
 ];
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function PosShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const nav = useNavigate();
   const { loaded, loading, error } = useStore();
