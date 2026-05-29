@@ -36,12 +36,19 @@ function LoginPage() {
       }
       sessionStorage.setItem("gb_admin", "1");
       sessionStorage.setItem("gb_admin_role", "user");
+      const ownerData = { name: "Owner", email: id, role: "owner" };
+      localStorage.setItem("user-data", JSON.stringify(ownerData));
+      localStorage.setItem("user", JSON.stringify(ownerData));
       window.dispatchEvent(new Event("gb-role-changed"));
       toast.success("Selamat datang, Owner!");
       navigate({ to: "/admin" });
       return;
     }
     sessionStorage.removeItem("gb_admin");
+    const kasirData = { name: identifier.trim() || "Kasir", email: id, role: "kasir" };
+    localStorage.setItem("user-data", JSON.stringify(kasirData));
+    localStorage.setItem("user", JSON.stringify(kasirData));
+    toast.success("Selamat datang, Kasir!");
     navigate({ to: "/pos" });
   };
 

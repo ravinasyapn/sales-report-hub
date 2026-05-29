@@ -179,19 +179,16 @@ function AdminLayout() {
             <div className="px-4 pt-2 pb-2 flex items-center gap-2">
               <Wallet className="w-3.5 h-3.5 text-accent/60" />
               <span className="text-[10px] uppercase tracking-[0.18em] font-bold text-accent/60">
-                Kasir Eksternal
+                Kasir POS
               </span>
             </div>
-            <a
-              href="/pos"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/pos"
               className="group flex items-center gap-3 px-4 py-3 rounded-full text-sm font-semibold text-accent/85 hover:bg-secondary/60 transition"
             >
               <Wallet className="w-[18px] h-[18px] shrink-0" />
               <span className="flex-1 truncate">Buka Kasir POS</span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100" />
-            </a>
+            </Link>
           </div>
         )}
 

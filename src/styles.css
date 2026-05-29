@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Poppins:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -59,6 +60,11 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-maroon: var(--maroon);
+  --color-pink-soft: var(--pink-soft);
+  --color-pink-deep: var(--pink-deep);
+  --color-olive: var(--olive);
+  --color-olive-foreground: var(--olive-foreground);
 }
 
 :root {
@@ -180,4 +186,79 @@ html {
 }
 *::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+/* ============================================================
+ * POS theme tokens & utility classes (Gurita POS look & feel)
+ * Used by /pos pages, mirrors gurita-pos repo's styles.
+ * ============================================================ */
+:root {
+  --pink-soft: oklch(0.9 0.05 10);
+  --pink-deep: oklch(0.78 0.1 10);
+  --maroon: oklch(0.38 0.11 25);
+  --olive: oklch(0.65 0.08 110);
+  --olive-foreground: oklch(0.32 0.09 25);
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans-pos: "Poppins", system-ui, sans-serif;
+}
+
+.bg-pink-soft { background-color: var(--pink-soft); }
+.bg-pink-deep { background-color: var(--pink-deep); }
+.text-pink-deep { color: var(--pink-deep); }
+.text-maroon { color: var(--maroon); }
+.bg-maroon { background-color: var(--maroon); }
+.bg-olive { background-color: var(--olive); }
+.text-olive { color: var(--olive); }
+.text-olive-foreground { color: var(--olive-foreground); }
+.border-maroon { border-color: var(--maroon); }
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.btn-olive {
+  background-color: var(--olive);
+  color: var(--maroon);
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.65rem 1.5rem;
+  transition: filter .2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-olive:hover { filter: brightness(0.95); }
+
+.btn-maroon {
+  background-color: var(--maroon);
+  color: var(--primary-foreground, #fff);
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.65rem 1.5rem;
+  transition: filter .2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-maroon:hover { filter: brightness(1.1); }
+
+.input-pill {
+  width: 100%;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 0.7rem 1.1rem;
+  outline: none;
+  font-size: 0.95rem;
+  color: var(--maroon);
+}
+.input-pill::placeholder { color: color-mix(in oklab, var(--maroon) 45%, transparent); }
+.input-pill:focus { box-shadow: 0 0 0 3px color-mix(in oklab, var(--maroon) 15%, transparent); }
+
+.scroll-pretty::-webkit-scrollbar { width: 6px; }
+.scroll-pretty::-webkit-scrollbar-track { background: transparent; }
+.scroll-pretty::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--maroon) 30%, transparent);
+  border-radius: 9999px;
 }
