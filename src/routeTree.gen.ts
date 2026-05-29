@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as PosRouteImport } from './routes/pos'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -37,6 +38,11 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PosRoute = PosRouteImport.update({
+  id: '/pos',
+  path: '/pos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
@@ -53,9 +59,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const PosIndexRoute = PosIndexRouteImport.update({
-  id: '/pos/',
-  path: '/pos/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => PosRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
@@ -63,24 +69,24 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   getParentRoute: () => AdminRoute,
 } as any)
 const PosSettingsRoute = PosSettingsRouteImport.update({
-  id: '/pos/settings',
-  path: '/pos/settings',
-  getParentRoute: () => rootRouteImport,
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => PosRoute,
 } as any)
 const PosProductsRoute = PosProductsRouteImport.update({
-  id: '/pos/products',
-  path: '/pos/products',
-  getParentRoute: () => rootRouteImport,
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => PosRoute,
 } as any)
 const PosHistoryRoute = PosHistoryRouteImport.update({
-  id: '/pos/history',
-  path: '/pos/history',
-  getParentRoute: () => rootRouteImport,
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => PosRoute,
 } as any)
 const PosCategoriesRoute = PosCategoriesRouteImport.update({
-  id: '/pos/categories',
-  path: '/pos/categories',
-  getParentRoute: () => rootRouteImport,
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => PosRoute,
 } as any)
 const AdminUserRoute = AdminUserRouteImport.update({
   id: '/user',
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
+  '/pos': typeof PosRouteWithChildren
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/accounts': typeof AdminAccountsRoute
@@ -155,6 +162,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
+  '/pos': typeof PosRouteWithChildren
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/accounts': typeof AdminAccountsRoute
@@ -176,6 +184,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/forgot-password'
+    | '/pos'
     | '/register'
     | '/reset-password'
     | '/admin/accounts'
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/forgot-password'
+    | '/pos'
     | '/register'
     | '/reset-password'
     | '/admin/accounts'
@@ -233,13 +243,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  PosRoute: typeof PosRouteWithChildren
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
-  PosCategoriesRoute: typeof PosCategoriesRoute
-  PosHistoryRoute: typeof PosHistoryRoute
-  PosProductsRoute: typeof PosProductsRoute
-  PosSettingsRoute: typeof PosSettingsRoute
-  PosIndexRoute: typeof PosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -256,6 +262,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pos': {
+      id: '/pos'
+      path: '/pos'
+      fullPath: '/pos'
+      preLoaderRoute: typeof PosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -281,10 +294,10 @@ declare module '@tanstack/react-router' {
     }
     '/pos/': {
       id: '/pos/'
-      path: '/pos'
+      path: '/'
       fullPath: '/pos/'
       preLoaderRoute: typeof PosIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PosRoute
     }
     '/admin/': {
       id: '/admin/'
@@ -295,31 +308,31 @@ declare module '@tanstack/react-router' {
     }
     '/pos/settings': {
       id: '/pos/settings'
-      path: '/pos/settings'
+      path: '/settings'
       fullPath: '/pos/settings'
       preLoaderRoute: typeof PosSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PosRoute
     }
     '/pos/products': {
       id: '/pos/products'
-      path: '/pos/products'
+      path: '/products'
       fullPath: '/pos/products'
       preLoaderRoute: typeof PosProductsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PosRoute
     }
     '/pos/history': {
       id: '/pos/history'
-      path: '/pos/history'
+      path: '/history'
       fullPath: '/pos/history'
       preLoaderRoute: typeof PosHistoryRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PosRoute
     }
     '/pos/categories': {
       id: '/pos/categories'
-      path: '/pos/categories'
+      path: '/categories'
       fullPath: '/pos/categories'
       preLoaderRoute: typeof PosCategoriesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PosRoute
     }
     '/admin/user': {
       id: '/admin/user'
@@ -388,17 +401,31 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AdminRoute: AdminRouteWithChildren,
-  ForgotPasswordRoute: ForgotPasswordRoute,
-  RegisterRoute: RegisterRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
+interface PosRouteChildren {
+  PosCategoriesRoute: typeof PosCategoriesRoute
+  PosHistoryRoute: typeof PosHistoryRoute
+  PosProductsRoute: typeof PosProductsRoute
+  PosSettingsRoute: typeof PosSettingsRoute
+  PosIndexRoute: typeof PosIndexRoute
+}
+
+const PosRouteChildren: PosRouteChildren = {
   PosCategoriesRoute: PosCategoriesRoute,
   PosHistoryRoute: PosHistoryRoute,
   PosProductsRoute: PosProductsRoute,
   PosSettingsRoute: PosSettingsRoute,
   PosIndexRoute: PosIndexRoute,
+}
+
+const PosRouteWithChildren = PosRoute._addFileChildren(PosRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  PosRoute: PosRouteWithChildren,
+  RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
