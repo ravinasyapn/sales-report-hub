@@ -92,6 +92,7 @@ export type ApiProduct = {
   unit: string;
   categoryId: string;
   image: string;
+  stock?: number;
 };
 const mapProduct = (p: any): ApiProduct => ({
   id: idStr(p.id),
