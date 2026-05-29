@@ -183,7 +183,7 @@ function AdminLayout() {
               </span>
             </div>
             <a
-              href="https://github.com/ravinasyapn/gurita-pos"
+              href="/pos"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-3 px-4 py-3 rounded-full text-sm font-semibold text-accent/85 hover:bg-secondary/60 transition"

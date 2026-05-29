@@ -11,10 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as PosRouteImport } from './routes/pos'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PosIndexRouteImport } from './routes/pos.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as PosSettingsRouteImport } from './routes/pos.settings'
+import { Route as PosProductsRouteImport } from './routes/pos.products'
+import { Route as PosHistoryRouteImport } from './routes/pos.history'
+import { Route as PosCategoriesRouteImport } from './routes/pos.categories'
 import { Route as AdminUserRouteImport } from './routes/admin.user'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
@@ -32,6 +38,11 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PosRoute = PosRouteImport.update({
+  id: '/pos',
+  path: '/pos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
@@ -47,10 +58,35 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PosIndexRoute = PosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PosRoute,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const PosSettingsRoute = PosSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => PosRoute,
+} as any)
+const PosProductsRoute = PosProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => PosRoute,
+} as any)
+const PosHistoryRoute = PosHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => PosRoute,
+} as any)
+const PosCategoriesRoute = PosCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => PosRoute,
 } as any)
 const AdminUserRoute = AdminUserRouteImport.update({
   id: '/user',
@@ -87,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
+  '/pos': typeof PosRouteWithChildren
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/accounts': typeof AdminAccountsRoute
@@ -95,7 +132,12 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/user': typeof AdminUserRoute
+  '/pos/categories': typeof PosCategoriesRoute
+  '/pos/history': typeof PosHistoryRoute
+  '/pos/products': typeof PosProductsRoute
+  '/pos/settings': typeof PosSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/pos/': typeof PosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -108,13 +150,19 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/user': typeof AdminUserRoute
+  '/pos/categories': typeof PosCategoriesRoute
+  '/pos/history': typeof PosHistoryRoute
+  '/pos/products': typeof PosProductsRoute
+  '/pos/settings': typeof PosSettingsRoute
   '/admin': typeof AdminIndexRoute
+  '/pos': typeof PosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
+  '/pos': typeof PosRouteWithChildren
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin/accounts': typeof AdminAccountsRoute
@@ -123,7 +171,12 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/user': typeof AdminUserRoute
+  '/pos/categories': typeof PosCategoriesRoute
+  '/pos/history': typeof PosHistoryRoute
+  '/pos/products': typeof PosProductsRoute
+  '/pos/settings': typeof PosSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/pos/': typeof PosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +184,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/forgot-password'
+    | '/pos'
     | '/register'
     | '/reset-password'
     | '/admin/accounts'
@@ -139,7 +193,12 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/user'
+    | '/pos/categories'
+    | '/pos/history'
+    | '/pos/products'
+    | '/pos/settings'
     | '/admin/'
+    | '/pos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -152,12 +211,18 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/user'
+    | '/pos/categories'
+    | '/pos/history'
+    | '/pos/products'
+    | '/pos/settings'
     | '/admin'
+    | '/pos'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/forgot-password'
+    | '/pos'
     | '/register'
     | '/reset-password'
     | '/admin/accounts'
@@ -166,13 +231,19 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/user'
+    | '/pos/categories'
+    | '/pos/history'
+    | '/pos/products'
+    | '/pos/settings'
     | '/admin/'
+    | '/pos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  PosRoute: typeof PosRouteWithChildren
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
 }
@@ -191,6 +262,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pos': {
+      id: '/pos'
+      path: '/pos'
+      fullPath: '/pos'
+      preLoaderRoute: typeof PosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -214,12 +292,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pos/': {
+      id: '/pos/'
+      path: '/'
+      fullPath: '/pos/'
+      preLoaderRoute: typeof PosIndexRouteImport
+      parentRoute: typeof PosRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/pos/settings': {
+      id: '/pos/settings'
+      path: '/settings'
+      fullPath: '/pos/settings'
+      preLoaderRoute: typeof PosSettingsRouteImport
+      parentRoute: typeof PosRoute
+    }
+    '/pos/products': {
+      id: '/pos/products'
+      path: '/products'
+      fullPath: '/pos/products'
+      preLoaderRoute: typeof PosProductsRouteImport
+      parentRoute: typeof PosRoute
+    }
+    '/pos/history': {
+      id: '/pos/history'
+      path: '/history'
+      fullPath: '/pos/history'
+      preLoaderRoute: typeof PosHistoryRouteImport
+      parentRoute: typeof PosRoute
+    }
+    '/pos/categories': {
+      id: '/pos/categories'
+      path: '/categories'
+      fullPath: '/pos/categories'
+      preLoaderRoute: typeof PosCategoriesRouteImport
+      parentRoute: typeof PosRoute
     }
     '/admin/user': {
       id: '/admin/user'
@@ -288,10 +401,29 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface PosRouteChildren {
+  PosCategoriesRoute: typeof PosCategoriesRoute
+  PosHistoryRoute: typeof PosHistoryRoute
+  PosProductsRoute: typeof PosProductsRoute
+  PosSettingsRoute: typeof PosSettingsRoute
+  PosIndexRoute: typeof PosIndexRoute
+}
+
+const PosRouteChildren: PosRouteChildren = {
+  PosCategoriesRoute: PosCategoriesRoute,
+  PosHistoryRoute: PosHistoryRoute,
+  PosProductsRoute: PosProductsRoute,
+  PosSettingsRoute: PosSettingsRoute,
+  PosIndexRoute: PosIndexRoute,
+}
+
+const PosRouteWithChildren = PosRoute._addFileChildren(PosRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  PosRoute: PosRouteWithChildren,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
 }
