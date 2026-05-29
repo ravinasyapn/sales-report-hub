@@ -125,7 +125,7 @@ export const actions = {
     const tx = await transactionsApi.create(t);
     const products = store.products.map((p) => {
       const item = t.items.find((i) => i.name === p.name);
-      return item ? { ...p, stock: Math.max(0, p.stock - item.qty) } : p;
+      return item ? { ...p, stock: Math.max(0, (p.stock ?? 0) - item.qty) } : p;
     });
     store = { ...store, transactions: [tx, ...store.transactions], products };
     emit();
