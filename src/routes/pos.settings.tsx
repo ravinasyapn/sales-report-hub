@@ -7,11 +7,11 @@ import { Settings as SIcon, Save, Trash2 } from "lucide-react";
 export const Route = createFileRoute("/pos/settings")({ component: SettingsPage });
 
 function SettingsPage() {
-  const { settings, user } = useStore(); // Asumsi: 'user' berisi data role
+  const { settings } = useStore();
   const [form, setForm] = useState(settings);
   const [saved, setSaved] = useState(false);
 
-  const isOwner = user?.role === 'owner'; // Logika pengecekan role
+  const isOwner = false;
 
   function save(e: React.FormEvent) {
     e.preventDefault();
