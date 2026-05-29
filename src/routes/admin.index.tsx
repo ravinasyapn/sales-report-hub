@@ -176,7 +176,7 @@ function AdminDashboard() {
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <ShortcutCard
-          href="https://github.com/ravinasyapn/gurita-pos"
+          href="/pos"
           external
           icon={ShoppingCart}
           title="Buka Kasir POS"

@@ -42,7 +42,7 @@ function LoginPage() {
       return;
     }
     sessionStorage.removeItem("gb_admin");
-    window.location.href = "https://github.com/ravinasyapn/gurita-pos";
+    navigate({ to: "/pos" });
   };
 
   return (
