@@ -14,7 +14,12 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PosIndexRouteImport } from './routes/pos.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as PosSettingsRouteImport } from './routes/pos.settings'
+import { Route as PosProductsRouteImport } from './routes/pos.products'
+import { Route as PosHistoryRouteImport } from './routes/pos.history'
+import { Route as PosCategoriesRouteImport } from './routes/pos.categories'
 import { Route as AdminUserRouteImport } from './routes/admin.user'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
@@ -47,10 +52,35 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PosIndexRoute = PosIndexRouteImport.update({
+  id: '/pos/',
+  path: '/pos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const PosSettingsRoute = PosSettingsRouteImport.update({
+  id: '/pos/settings',
+  path: '/pos/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PosProductsRoute = PosProductsRouteImport.update({
+  id: '/pos/products',
+  path: '/pos/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PosHistoryRoute = PosHistoryRouteImport.update({
+  id: '/pos/history',
+  path: '/pos/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PosCategoriesRoute = PosCategoriesRouteImport.update({
+  id: '/pos/categories',
+  path: '/pos/categories',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUserRoute = AdminUserRouteImport.update({
   id: '/user',
@@ -95,7 +125,12 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/user': typeof AdminUserRoute
+  '/pos/categories': typeof PosCategoriesRoute
+  '/pos/history': typeof PosHistoryRoute
+  '/pos/products': typeof PosProductsRoute
+  '/pos/settings': typeof PosSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/pos/': typeof PosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -108,7 +143,12 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/user': typeof AdminUserRoute
+  '/pos/categories': typeof PosCategoriesRoute
+  '/pos/history': typeof PosHistoryRoute
+  '/pos/products': typeof PosProductsRoute
+  '/pos/settings': typeof PosSettingsRoute
   '/admin': typeof AdminIndexRoute
+  '/pos': typeof PosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -123,7 +163,12 @@ export interface FileRoutesById {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/user': typeof AdminUserRoute
+  '/pos/categories': typeof PosCategoriesRoute
+  '/pos/history': typeof PosHistoryRoute
+  '/pos/products': typeof PosProductsRoute
+  '/pos/settings': typeof PosSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/pos/': typeof PosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -139,7 +184,12 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/user'
+    | '/pos/categories'
+    | '/pos/history'
+    | '/pos/products'
+    | '/pos/settings'
     | '/admin/'
+    | '/pos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -152,7 +202,12 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/user'
+    | '/pos/categories'
+    | '/pos/history'
+    | '/pos/products'
+    | '/pos/settings'
     | '/admin'
+    | '/pos'
   id:
     | '__root__'
     | '/'
@@ -166,7 +221,12 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/settings'
     | '/admin/user'
+    | '/pos/categories'
+    | '/pos/history'
+    | '/pos/products'
+    | '/pos/settings'
     | '/admin/'
+    | '/pos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -175,6 +235,11 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  PosCategoriesRoute: typeof PosCategoriesRoute
+  PosHistoryRoute: typeof PosHistoryRoute
+  PosProductsRoute: typeof PosProductsRoute
+  PosSettingsRoute: typeof PosSettingsRoute
+  PosIndexRoute: typeof PosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -214,12 +279,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pos/': {
+      id: '/pos/'
+      path: '/pos'
+      fullPath: '/pos/'
+      preLoaderRoute: typeof PosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/pos/settings': {
+      id: '/pos/settings'
+      path: '/pos/settings'
+      fullPath: '/pos/settings'
+      preLoaderRoute: typeof PosSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pos/products': {
+      id: '/pos/products'
+      path: '/pos/products'
+      fullPath: '/pos/products'
+      preLoaderRoute: typeof PosProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pos/history': {
+      id: '/pos/history'
+      path: '/pos/history'
+      fullPath: '/pos/history'
+      preLoaderRoute: typeof PosHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pos/categories': {
+      id: '/pos/categories'
+      path: '/pos/categories'
+      fullPath: '/pos/categories'
+      preLoaderRoute: typeof PosCategoriesRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/user': {
       id: '/admin/user'
@@ -294,7 +394,22 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  PosCategoriesRoute: PosCategoriesRoute,
+  PosHistoryRoute: PosHistoryRoute,
+  PosProductsRoute: PosProductsRoute,
+  PosSettingsRoute: PosSettingsRoute,
+  PosIndexRoute: PosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
