@@ -28,12 +28,8 @@ export function PosShell({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && !auth.isAuthed()) {
-      nav({ to: "/" });
-      return;
-    }
     if (!loaded && !loading) actions.syncAll();
-  }, [loaded, loading, nav]);
+  }, [loaded, loading]);
 
   useEffect(() => {
     if (window.innerWidth < 1024) setSidebarOpen(false);
