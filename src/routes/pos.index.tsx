@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { PosShell } from "@/components/PosShell";
-import { useStore, useCart, cartActions, actions, formatIDR, type Transaction } from "@/lib/pos-store";
+import { PosShell } from "@/components/pos/PosShell";
+import { useStore, useCart, cartActions, actions, formatIDR, type Transaction } from "@/lib/pos";
 import { ShoppingCart, Trash2, User, Search, Receipt } from "lucide-react";
 
 export const Route = createFileRoute("/pos/")({ component: POS });
@@ -69,7 +69,7 @@ function POS() {
 
   return (
     <PosShell>
-      <div className="flex h-screen">
+      <div className="flex h-[calc(100vh-3.5rem)]">
         {/* Catalog */}
         <div className="flex-1 p-6 overflow-y-auto scroll-pretty bg-pink-soft">
           <div className="flex items-center gap-3 mb-2">
@@ -116,7 +116,7 @@ function POS() {
         </div>
 
         {/* Cart */}
-        <aside className="w-95 shrink-0 bg-olive flex flex-col h-screen">
+        <aside className="w-95 shrink-0 bg-olive flex flex-col h-full">
           <div className="p-5 flex items-center justify-between border-b border-maroon/10">
             <div className="flex items-center gap-2 text-maroon">
               <ShoppingCart size={22} />

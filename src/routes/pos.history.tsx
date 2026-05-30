@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { PosShell } from "@/components/PosShell";
-import { useStore, formatIDR } from "@/lib/pos-store";
+import { PosShell } from "@/components/pos/PosShell";
+import { useStore, formatIDR, isOwner } from "@/lib/pos";
 import { Store, Search, Receipt as RIcon } from "lucide-react";
 
 export const Route = createFileRoute("/pos/history")({ component: History });
@@ -10,9 +10,7 @@ function History() {
   const { transactions } = useStore();
   const [q, setQ] = useState("");
   const [selected, setSelected] = useState<typeof transactions[0] | null>(null);
-
-  // Ambil data user dari LocalStorage untuk pengecekan role secara dinamis
-  const currentUser = JSON.parse(localStorage.getItem('user-data') || '{}');
+  const currentUser = { role: isOwner() ? "owner" : "kasir" };
 
   // Mengoptimalkan pencarian agar mendukung pencarian berdasarkan nama Kasir
   const filtered = useMemo(() =>

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { PosShell } from "@/components/PosShell";
-import { useStore, actions, type Category } from "@/lib/pos-store";
+import { PosShell } from "@/components/pos/PosShell";
+import { useStore, actions, isOwner, type Category } from "@/lib/pos";
 import { Plus, Pencil, Trash2, Boxes } from "lucide-react";
 
 export const Route = createFileRoute("/pos/categories")({ component: Categories });
@@ -12,9 +12,8 @@ function Categories() {
   const [editName, setEditName] = useState("");
   const [openAdd, setOpenAdd] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
-
-  // Ambil data user dari LocalStorage untuk pengecekan role
-  const currentUser = JSON.parse(localStorage.getItem('user-data') || '{}');
+  // Kasir (volunteer) hanya melihat. Owner penuh.
+  const currentUser = { role: isOwner() ? "owner" : "kasir" };
 
   return (
     <PosShell>

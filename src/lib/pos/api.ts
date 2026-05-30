@@ -1,3 +1,4 @@
+// POS — HTTP client (frontend kasir POS)
 export const API_BASE = "https://distance-bulge-blot.ngrok-free.dev/api";
 
 const TOKEN_KEY = "gurita-token";
@@ -22,17 +23,11 @@ export class ApiError extends Error {
   }
 }
 
-export async function api<T = any>(
-  path: string,
-  init: RequestInit = {},
-): Promise<T> {
+export async function api<T = any>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers);
   headers.set("Accept", "application/json");
   headers.set("ngrok-skip-browser-warning", "true");
-  
-  if (init.body && !(init.body instanceof FormData)) {
-    headers.set("Content-Type", "application/json");
-  }
+  if (init.body && !(init.body instanceof FormData)) headers.set("Content-Type", "application/json");
   const t = auth.token;
   if (t) headers.set("Authorization", `Bearer ${t}`);
 
@@ -40,7 +35,6 @@ export async function api<T = any>(
   const text = await res.text();
   let data: any = null;
   try { data = text ? JSON.parse(text) : null; } catch { data = text; }
-
   if (!res.ok) {
     const msg = (data && (data.message || data.error)) || `HTTP ${res.status}`;
     throw new ApiError(res.status, msg, data);
@@ -51,7 +45,7 @@ export async function api<T = any>(
 const unwrap = <T,>(d: any): T => (d && typeof d === "object" && "data" in d ? d.data : d);
 const idStr = (v: any) => String(v);
 
-// ---------- Authentications ----------
+// ---------- Auth ----------
 export async function login(payload: { email: string; password: string }) {
   const d = await api<any>("/login", { method: "POST", body: JSON.stringify(payload) });
   const token = d.token || d.access_token || d?.data?.token;
@@ -59,16 +53,10 @@ export async function login(payload: { email: string; password: string }) {
   auth.set(token);
   return d.user || d?.data?.user || null;
 }
-
-export async function register(payload: { name: string; email: string; phone?: string; password: string; password_confirmation: string }) {
-  return api("/register", { method: "POST", body: JSON.stringify(payload) });
-}
-
 export async function logout() {
   try { await api("/logout", { method: "POST" }); } catch { /* ignore */ }
   auth.clear();
 }
-
 export async function forgotPassword(email: string) {
   return api("/forgot-password", { method: "POST", body: JSON.stringify({ email }) });
 }
@@ -76,7 +64,6 @@ export async function forgotPassword(email: string) {
 // ---------- Categories ----------
 export type ApiCategory = { id: string; name: string };
 const mapCategory = (c: any): ApiCategory => ({ id: idStr(c.id), name: c.name });
-
 export const categoriesApi = {
   list: async () => unwrap<any[]>(await api("/categories")).map(mapCategory),
   create: async (name: string) => mapCategory(unwrap(await api("/categories", { method: "POST", body: JSON.stringify({ name }) }))),
@@ -86,13 +73,8 @@ export const categoriesApi = {
 
 // ---------- Products ----------
 export type ApiProduct = {
-  id: string;
-  name: string;
-  price: number;
-  unit: string;
-  categoryId: string;
-  image: string;
-  stock?: number;
+  id: string; name: string; price: number; unit: string;
+  categoryId: string; image: string; stock?: number;
 };
 const mapProduct = (p: any): ApiProduct => ({
   id: idStr(p.id),
@@ -103,13 +85,8 @@ const mapProduct = (p: any): ApiProduct => ({
   image: p.image ?? p.image_url ?? "",
 });
 const productPayload = (p: Partial<ApiProduct>) => ({
-  name: p.name,
-  price: p.price,
-  unit: p.unit,
-  category_id: p.categoryId,
-  image: p.image,
+  name: p.name, price: p.price, unit: p.unit, category_id: p.categoryId, image: p.image,
 });
-
 export const productsApi = {
   list: async () => unwrap<any[]>(await api("/products")).map(mapProduct),
   create: async (p: Omit<ApiProduct, "id">) => mapProduct(unwrap(await api("/products", { method: "POST", body: JSON.stringify(productPayload(p)) }))),
@@ -119,33 +96,23 @@ export const productsApi = {
 
 // ---------- Transactions ----------
 export type ApiTransaction = {
-  id: string;
-  date: string;
-  customer: string;
+  id: string; date: string; customer: string;
   method: "Tunai" | "QRIS";
   items: { name: string; qty: number; price: number; unit: string }[];
-  subtotal: number;
-  paid: number;
-  change: number;
-  // PERBAIKAN 1: Tambahkan properti cashier_name ke dalam Blueprint tipe data
-  cashier_name?: string; 
+  subtotal: number; paid: number; change: number;
+  cashier_name?: string;
 };
-
 const mapTx = (t: any): ApiTransaction => ({
   id: idStr(t.id),
   date: t.created_at || t.date || new Date().toISOString(),
   customer: t.customer ?? "Pelanggan",
   method: (t.method as any) ?? "Tunai",
-  items: (t.items ?? []).map((i: any) => ({
-    name: i.name, qty: Number(i.qty), price: Number(i.price), unit: i.unit ?? "",
-  })),
+  items: (t.items ?? []).map((i: any) => ({ name: i.name, qty: Number(i.qty), price: Number(i.price), unit: i.unit ?? "" })),
   subtotal: Number(t.subtotal ?? 0),
   paid: Number(t.paid ?? 0),
   change: Number(t.change ?? 0),
-  // PERBAIKAN 2: Tangkap data field 'cashier_name' yang dikirim oleh Controller Laravel
-  cashier_name: t.cashier_name ?? undefined, 
+  cashier_name: t.cashier_name ?? undefined,
 });
-
 export const transactionsApi = {
   list: async () => unwrap<any[]>(await api("/transactions")).map(mapTx),
   create: async (t: Omit<ApiTransaction, "id" | "date">) =>
