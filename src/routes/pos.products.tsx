@@ -1,31 +1,22 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { PosShell } from "@/components/PosShell";
-import { useStore, actions, formatIDR, type Product } from "@/lib/pos-store";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { PosShell } from "@/components/pos/PosShell";
+import { useStore, actions, formatIDR, isOwner, type Product } from "@/lib/pos";
 import { Plus, Pencil, Trash2, Package, Search, ArrowDownAZ } from "lucide-react";
 
 export const Route = createFileRoute("/pos/products")({ component: Products });
 type SortKey = "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
 function Products() {
-  const navigate = useNavigate();
   const { products, categories } = useStore();
   const [editing, setEditing] = useState<Product | null>(null);
   const [open, setOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortKey>("name-asc");
-
-  // Ambil data user dari LocalStorage untuk pengecekan role
-  const currentUser = JSON.parse(localStorage.getItem('user-data') || '{}');
-
-  // Kunci Pengaman Halaman (Route Guard) Khusus Owner
-  useEffect(() => {
-    if (currentUser.role === 'kasir') {
-      alert("⚠️ Akses Ditolak! Halaman manajemen produk hanya untuk Owner.");
-      navigate({ to: "/pos/history" });
-    }
-  }, [navigate, currentUser.role]);
+  // Kasir (volunteer) tetap boleh melihat halaman, tapi semua aksi CRUD disembunyikan
+  const owner = isOwner();
+  const currentUser = { role: owner ? "owner" : "kasir" };
 
   const filtered = products
     .filter((p) => {
