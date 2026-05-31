@@ -149,12 +149,18 @@ export const actions = {
     store = { ...store, products: store.products.filter((p) => p.id !== id) }; emit();
   },
 
-  async addTransaction(t: Omit<Transaction, "id" | "date">) {
+  async addTransaction(t: Omit<Transaction, "id" | "date" | "invoice" | "status"> & { status?: Transaction["status"] }) {
     let tx: Transaction;
     if (store.usingDummy) {
-      tx = { ...t, id: `tx-${Date.now()}`, date: new Date().toISOString() } as Transaction;
+      const id = `tx-${Date.now()}`;
+      const date = new Date().toISOString();
+      const status = t.status ?? (t.paid >= t.subtotal ? "Lunas" : "Pending");
+      const d = new Date(date);
+      const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+      const invoice = `INV-${ymd}-${String(Date.now()).slice(-4)}`;
+      tx = { ...t, id, date, invoice, status } as Transaction;
     } else {
-      tx = await transactionsApi.create(t);
+      tx = await transactionsApi.create(t as any);
     }
     const products = store.products.map((p) => {
       const item = t.items.find((i) => i.name === p.name);

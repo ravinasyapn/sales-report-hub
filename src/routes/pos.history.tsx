@@ -14,9 +14,10 @@ function History() {
 
   // Mengoptimalkan pencarian agar mendukung pencarian berdasarkan nama Kasir
   const filtered = useMemo(() =>
-    transactions.filter((t) => 
-      t.customer.toLowerCase().includes(q.toLowerCase()) || 
+    transactions.filter((t) =>
+      t.customer.toLowerCase().includes(q.toLowerCase()) ||
       t.id.includes(q) ||
+      (t.invoice && t.invoice.toLowerCase().includes(q.toLowerCase())) ||
       (t.cashier_name && t.cashier_name.toLowerCase().includes(q.toLowerCase()))
     ),
     [transactions, q]
@@ -111,31 +112,41 @@ function History() {
             <thead className="bg-secondary text-maroon">
               <tr>
                 <th className="text-left p-4">Tanggal</th>
+                <th className="text-left p-4">No. Struk</th>
                 <th className="text-left p-4">Pelanggan</th>
                 <th className="text-left p-4">Item</th>
                 <th className="text-left p-4">Metode</th>
+                <th className="text-left p-4">Status</th>
                 <th className="text-left p-4">Kasir</th>
                 <th className="text-right p-4">Total</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((t) => (
-                <tr key={t.id} className="border-t border-border text-maroon hover:bg-secondary/40">
-                  <td className="p-3">{new Date(t.date).toLocaleString("id-ID")}</td>
-                  <td className="p-3 font-semibold">{t.customer}</td>
-                  <td className="p-3">{t.items.length} item</td>
-                  <td className="p-3"><span className="text-xs px-2 py-1 rounded-full bg-secondary">{t.method}</span></td>
-                  <td className="p-3">
-                    <span className="bg-olive/10 text-olive text-xs px-2.5 py-1 rounded-md font-medium">
-                      {t.cashier_name || "Kasir"}
-                    </span>
-                  </td>
-                  <td className="p-3 text-right font-bold">{formatIDR(t.subtotal)}</td>
-                  <td className="p-3 text-right"><button onClick={() => setSelected(t)} className="btn-maroon text-xs py-1.5 px-3">Detail</button></td>
-                </tr>
-              ))}
-              {filtered.length === 0 && <tr><td colSpan={7} className="p-12 text-center text-maroon/60">Belum ada transaksi.</td></tr>}
+              {filtered.map((t) => {
+                const statusStyle =
+                  t.status === "Lunas" ? "bg-olive/15 text-olive" :
+                  t.status === "Pending" ? "bg-yellow-100 text-yellow-800" :
+                  "bg-red-100 text-red-700";
+                return (
+                  <tr key={t.id} className="border-t border-border text-maroon hover:bg-secondary/40">
+                    <td className="p-3">{new Date(t.date).toLocaleString("id-ID")}</td>
+                    <td className="p-3 font-mono text-xs">{t.invoice}</td>
+                    <td className="p-3 font-semibold">{t.customer}</td>
+                    <td className="p-3">{t.items.length} item</td>
+                    <td className="p-3"><span className="text-xs px-2 py-1 rounded-full bg-secondary">{t.method}</span></td>
+                    <td className="p-3"><span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusStyle}`}>{t.status}</span></td>
+                    <td className="p-3">
+                      <span className="bg-olive/10 text-olive text-xs px-2.5 py-1 rounded-md font-medium">
+                        {t.cashier_name || "Kasir"}
+                      </span>
+                    </td>
+                    <td className="p-3 text-right font-bold">{formatIDR(t.subtotal)}</td>
+                    <td className="p-3 text-right"><button onClick={() => setSelected(t)} className="btn-maroon text-xs py-1.5 px-3">Detail</button></td>
+                  </tr>
+                );
+              })}
+              {filtered.length === 0 && <tr><td colSpan={9} className="p-12 text-center text-maroon/60">Belum ada transaksi.</td></tr>}
             </tbody>
           </table>
         </div>
@@ -148,12 +159,14 @@ function History() {
             <div className="text-center border-b border-dashed border-border pb-3 mb-3">
               <RIcon className="mx-auto text-maroon mb-1" />
               <h3 className="font-display text-xl font-bold text-maroon">Detail Transaksi</h3>
-              <p className="text-xs text-maroon/60 font-mono">{selected.id.slice(0, 8)}</p>
+              <p className="text-xs text-maroon/60 font-mono">{selected.invoice}</p>
             </div>
             <div className="text-xs space-y-1 text-maroon mb-3">
+              <div className="flex justify-between"><span>No. Struk</span><span className="font-mono">{selected.invoice}</span></div>
               <div className="flex justify-between"><span>Tanggal</span><span>{new Date(selected.date).toLocaleString("id-ID")}</span></div>
               <div className="flex justify-between"><span>Pelanggan</span><span>{selected.customer}</span></div>
               <div className="flex justify-between"><span>Metode</span><span>{selected.method}</span></div>
+              <div className="flex justify-between"><span>Status</span><span className="font-semibold">{selected.status}</span></div>
               <div className="flex justify-between"><span>Kasir</span><span className="font-semibold">{selected.cashier_name || "Kasir"}</span></div>
             </div>
             <div className="border-t border-dashed border-border pt-3 space-y-2 text-sm">

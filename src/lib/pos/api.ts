@@ -95,24 +95,41 @@ export const productsApi = {
 };
 
 // ---------- Transactions ----------
+export type TxStatus = "Lunas" | "Pending" | "Dibatalkan";
 export type ApiTransaction = {
-  id: string; date: string; customer: string;
+  id: string; invoice: string; date: string; customer: string;
   method: "Tunai" | "QRIS";
+  status: TxStatus;
   items: { name: string; qty: number; price: number; unit: string }[];
   subtotal: number; paid: number; change: number;
   cashier_name?: string;
 };
-const mapTx = (t: any): ApiTransaction => ({
-  id: idStr(t.id),
-  date: t.created_at || t.date || new Date().toISOString(),
-  customer: t.customer ?? "Pelanggan",
-  method: (t.method as any) ?? "Tunai",
-  items: (t.items ?? []).map((i: any) => ({ name: i.name, qty: Number(i.qty), price: Number(i.price), unit: i.unit ?? "" })),
-  subtotal: Number(t.subtotal ?? 0),
-  paid: Number(t.paid ?? 0),
-  change: Number(t.change ?? 0),
-  cashier_name: t.cashier_name ?? undefined,
-});
+const makeInvoice = (id: string, date: string) => {
+  const d = new Date(date);
+  const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+  const tail = String(id).replace(/\D/g, "").slice(-4).padStart(4, "0") || String(id).slice(-4).toUpperCase();
+  return `INV-${ymd}-${tail}`;
+};
+const mapTx = (t: any): ApiTransaction => {
+  const id = idStr(t.id);
+  const date = t.created_at || t.date || new Date().toISOString();
+  const paid = Number(t.paid ?? 0);
+  const subtotal = Number(t.subtotal ?? 0);
+  const status: TxStatus = t.status ?? (paid >= subtotal && subtotal > 0 ? "Lunas" : "Pending");
+  return {
+    id,
+    invoice: t.invoice ?? makeInvoice(id, date),
+    date,
+    customer: t.customer ?? "Pelanggan",
+    method: (t.method as any) ?? "Tunai",
+    status,
+    items: (t.items ?? []).map((i: any) => ({ name: i.name, qty: Number(i.qty), price: Number(i.price), unit: i.unit ?? "" })),
+    subtotal,
+    paid,
+    change: Number(t.change ?? 0),
+    cashier_name: t.cashier_name ?? undefined,
+  };
+};
 export const transactionsApi = {
   list: async () => unwrap<any[]>(await api("/transactions")).map(mapTx),
   create: async (t: Omit<ApiTransaction, "id" | "date">) =>
