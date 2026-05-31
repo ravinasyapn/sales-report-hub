@@ -14,9 +14,10 @@ function History() {
 
   // Mengoptimalkan pencarian agar mendukung pencarian berdasarkan nama Kasir
   const filtered = useMemo(() =>
-    transactions.filter((t) => 
-      t.customer.toLowerCase().includes(q.toLowerCase()) || 
+    transactions.filter((t) =>
+      t.customer.toLowerCase().includes(q.toLowerCase()) ||
       t.id.includes(q) ||
+      (t.invoice && t.invoice.toLowerCase().includes(q.toLowerCase())) ||
       (t.cashier_name && t.cashier_name.toLowerCase().includes(q.toLowerCase()))
     ),
     [transactions, q]
