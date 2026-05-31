@@ -112,31 +112,41 @@ function History() {
             <thead className="bg-secondary text-maroon">
               <tr>
                 <th className="text-left p-4">Tanggal</th>
+                <th className="text-left p-4">No. Struk</th>
                 <th className="text-left p-4">Pelanggan</th>
                 <th className="text-left p-4">Item</th>
                 <th className="text-left p-4">Metode</th>
+                <th className="text-left p-4">Status</th>
                 <th className="text-left p-4">Kasir</th>
                 <th className="text-right p-4">Total</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map((t) => (
-                <tr key={t.id} className="border-t border-border text-maroon hover:bg-secondary/40">
-                  <td className="p-3">{new Date(t.date).toLocaleString("id-ID")}</td>
-                  <td className="p-3 font-semibold">{t.customer}</td>
-                  <td className="p-3">{t.items.length} item</td>
-                  <td className="p-3"><span className="text-xs px-2 py-1 rounded-full bg-secondary">{t.method}</span></td>
-                  <td className="p-3">
-                    <span className="bg-olive/10 text-olive text-xs px-2.5 py-1 rounded-md font-medium">
-                      {t.cashier_name || "Kasir"}
-                    </span>
-                  </td>
-                  <td className="p-3 text-right font-bold">{formatIDR(t.subtotal)}</td>
-                  <td className="p-3 text-right"><button onClick={() => setSelected(t)} className="btn-maroon text-xs py-1.5 px-3">Detail</button></td>
-                </tr>
-              ))}
-              {filtered.length === 0 && <tr><td colSpan={7} className="p-12 text-center text-maroon/60">Belum ada transaksi.</td></tr>}
+              {filtered.map((t) => {
+                const statusStyle =
+                  t.status === "Lunas" ? "bg-olive/15 text-olive" :
+                  t.status === "Pending" ? "bg-yellow-100 text-yellow-800" :
+                  "bg-red-100 text-red-700";
+                return (
+                  <tr key={t.id} className="border-t border-border text-maroon hover:bg-secondary/40">
+                    <td className="p-3">{new Date(t.date).toLocaleString("id-ID")}</td>
+                    <td className="p-3 font-mono text-xs">{t.invoice}</td>
+                    <td className="p-3 font-semibold">{t.customer}</td>
+                    <td className="p-3">{t.items.length} item</td>
+                    <td className="p-3"><span className="text-xs px-2 py-1 rounded-full bg-secondary">{t.method}</span></td>
+                    <td className="p-3"><span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusStyle}`}>{t.status}</span></td>
+                    <td className="p-3">
+                      <span className="bg-olive/10 text-olive text-xs px-2.5 py-1 rounded-md font-medium">
+                        {t.cashier_name || "Kasir"}
+                      </span>
+                    </td>
+                    <td className="p-3 text-right font-bold">{formatIDR(t.subtotal)}</td>
+                    <td className="p-3 text-right"><button onClick={() => setSelected(t)} className="btn-maroon text-xs py-1.5 px-3">Detail</button></td>
+                  </tr>
+                );
+              })}
+              {filtered.length === 0 && <tr><td colSpan={9} className="p-12 text-center text-maroon/60">Belum ada transaksi.</td></tr>}
             </tbody>
           </table>
         </div>
