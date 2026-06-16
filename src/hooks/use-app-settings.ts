@@ -1,3 +1,10 @@
+/**
+ * Hook: useAppSettings
+ * ----------------------------------------------------------------------------
+ * Membaca & menyimpan pengaturan aplikasi (nama event, alamat & telepon
+ * pemilik) ke `localStorage`. Dipakai admin di halaman Setting, dan oleh
+ * struk kasir di halaman POS supaya identitas toko ikut tercetak.
+ */
 import { useEffect, useState } from "react";
 
 export type AppSettings = {

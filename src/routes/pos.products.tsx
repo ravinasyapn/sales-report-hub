@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { PosShell } from "@/components/pos/PosShell";
-import { useStore, actions, formatIDR, isOwner, type Product } from "@/lib/pos";
+import { PosShell } from "@/components/kasir/CangkangKasir";
+import { useStore, actions, formatIDR, isOwner, type Product } from "@/lib/kasir";
 import { Plus, Pencil, Trash2, Package, Search, ArrowDownAZ } from "lucide-react";
 
 export const Route = createFileRoute("/pos/products")({ component: Products });

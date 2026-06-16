@@ -1,10 +1,26 @@
-// POS — reactive store dengan fallback dummy data bila backend tidak tersedia
+/**
+ * ============================================================================
+ * PENYIMPANAN (STORE) — State Global Aplikasi Kasir
+ * ============================================================================
+ * Reactive store sederhana berbasis `useSyncExternalStore` (built-in React).
+ * Menyimpan: daftar kategori, produk, transaksi, pengaturan, dan keranjang.
+ *
+ * - `useStore()`     → hook React untuk membaca state (rerender otomatis)
+ * - `actions`        → semua aksi mutasi data (sync, tambah, edit, hapus)
+ * - `useCart()` +    → keranjang kasir sebelum transaksi disimpan
+ *   `cartActions`
+ * - `getCurrentUser`, `isOwner`, `formatIDR` → helper kecil
+ *
+ * FALLBACK: jika backend tidak merespons / kosong, aplikasi otomatis memakai
+ * data contoh dari `src/lib/mock/data-contoh.ts` (flag `usingDummy`).
+ * ============================================================================
+ */
 import { useSyncExternalStore } from "react";
 import {
   categoriesApi, productsApi, transactionsApi,
   type ApiCategory, type ApiProduct, type ApiTransaction,
 } from "./api";
-import { DUMMY_CATEGORIES, DUMMY_PRODUCTS, DUMMY_TRANSACTIONS } from "./dummy";
+import { DUMMY_CATEGORIES, DUMMY_PRODUCTS, DUMMY_TRANSACTIONS } from "@/lib/mock/data-contoh";
 // Sinkron dengan pengaturan admin (event_name / owner_address / owner_phone)
 import { SETTINGS_KEY as ADMIN_SETTINGS_KEY, SETTINGS_EVENT as ADMIN_SETTINGS_EVENT } from "@/hooks/use-app-settings";
 

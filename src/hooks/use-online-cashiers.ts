@@ -1,3 +1,10 @@
+/**
+ * Hook: useOnlineCashiers
+ * ----------------------------------------------------------------------------
+ * Mengembalikan daftar kasir yang sedang online (dipakai di dashboard admin).
+ * Saat ini memakai data dummy di localStorage; ganti ke API realtime saat
+ * backend siap (mis. Supabase Realtime channel "presence").
+ */
 import { useEffect, useState } from "react";
 
 export type OnlineCashier = {

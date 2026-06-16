@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { PosShell } from "@/components/pos/PosShell";
-import { useStore, useCart, cartActions, actions, formatIDR, type Transaction } from "@/lib/pos";
+import { PosShell } from "@/components/kasir/CangkangKasir";
+import { useStore, useCart, cartActions, actions, formatIDR, type Transaction } from "@/lib/kasir";
 import { ShoppingCart, Trash2, User, Search, Receipt } from "lucide-react";
 
 export const Route = createFileRoute("/pos/")({ component: POS });
@@ -44,7 +44,7 @@ function POS() {
       const userRaw = localStorage.getItem("user");
       const user = userRaw ? JSON.parse(userRaw) : null;
 
-      // Catatan: Pastikan di dalam fungsi `actions.addTransaction` pada file `@/lib/pos-store` Anda,
+      // Catatan: Pastikan di dalam fungsi `actions.addTransaction` pada file `@/lib/kasir-store` Anda,
       // request Axios/Fetch-nya sudah disisipkan header -> Authorization: `Bearer ${localStorage.getItem("token")}`
       const tx = await actions.addTransaction({
         customer: customer || "Pelanggan",

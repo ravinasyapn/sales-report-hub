@@ -1,37 +1,35 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { KeyRound, UserPlus, Trash2, Search, ShieldCheck, X, AlertTriangle } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { KeyRound, UserPlus, Trash2, Search, ShieldCheck, X, AlertTriangle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { penggunaApi, type ApiUser } from "@/lib/kasir";
 
 export const Route = createFileRoute("/admin/accounts")({
   head: () => ({ meta: [{ title: "Manajemen Akun — Admin" }] }),
   component: AccountsPage,
 });
 
-type Account = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string | null;
-  status: "verified" | "pending";
-  created_at: string;
-};
-
-const DUMMY: Account[] = [
-  { id: "1", name: "Salsabila Putri",   email: "salsa.kasir@gurita.id",  phone: "0812-3344-5566", status: "verified", created_at: "2025-05-21T08:30:00Z" },
-  { id: "2", name: "Rangga Pratama",    email: "rangga.kasir@gurita.id", phone: "0813-9988-2211", status: "verified", created_at: "2025-05-20T10:12:00Z" },
-  { id: "3", name: "Naila Rahmadhani",  email: "naila.kasir@gurita.id",  phone: "0851-7766-1199", status: "verified", created_at: "2025-05-19T15:45:00Z" },
-  { id: "4", name: "Bagas Wicaksono",   email: "bagas.kasir@gurita.id",  phone: "0822-4455-7788", status: "pending",  created_at: "2025-05-18T09:20:00Z" },
-  { id: "5", name: "Dewi Anjani",       email: "dewi.kasir@gurita.id",   phone: "0878-1122-3344", status: "verified", created_at: "2025-05-17T13:05:00Z" },
-];
-
 function AccountsPage() {
-  const [rows, setRows] = useState<Account[]>(DUMMY);
+  const [rows, setRows] = useState<ApiUser[]>([]);
+  const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [openForm, setOpenForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
-  const [confirmDelete, setConfirmDelete] = useState<Account | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<ApiUser | null>(null);
+
+  // Muat daftar akun dari backend
+  const load = async () => {
+    setLoading(true);
+    try {
+      setRows(await penggunaApi.list());
+    } catch (e: any) {
+      toast.error(e?.message || "Gagal memuat daftar akun");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => { load(); }, []);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -44,35 +42,42 @@ function AccountsPage() {
     );
   }, [rows, q]);
 
-  const createAccount = (e: React.FormEvent) => {
+  const createAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.password) return toast.error("Lengkapi semua kolom wajib");
     if (form.password.length < 6) return toast.error("Password minimal 6 karakter");
     setSubmitting(true);
-    setTimeout(() => {
-      setRows((r) => [
-        {
-          id: String(Date.now()),
-          name: form.name,
-          email: form.email.toLowerCase(),
-          phone: form.phone || null,
-          status: "verified",
-          created_at: new Date().toISOString(),
-        },
-        ...r,
-      ]);
+    try {
+      const created = await penggunaApi.create({
+        name: form.name,
+        email: form.email.toLowerCase(),
+        phone: form.phone,
+        password: form.password,
+        role: "kasir",
+      });
+      setRows((r) => [created, ...r]);
       setForm({ name: "", email: "", phone: "", password: "" });
       setOpenForm(false);
-      setSubmitting(false);
       toast.success("Akun Kasir berhasil dibuat");
-    }, 400);
+    } catch (e: any) {
+      toast.error(e?.message || "Gagal membuat akun");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const confirmRemove = () => {
+  const confirmRemove = async () => {
     if (!confirmDelete) return;
-    setRows((r) => r.filter((x) => x.id !== confirmDelete.id));
-    toast.success(`Akun ${confirmDelete.name} dihapus`);
+    const target = confirmDelete;
     setConfirmDelete(null);
+    try {
+      await penggunaApi.remove(target.id);
+      // Backend menonaktifkan (bukan hapus permanen) karena akun terikat transaksi.
+      setRows((r) => r.map((x) => (x.id === target.id ? { ...x, status: "nonaktif" } : x)));
+      toast.success(`Akun ${target.name} dinonaktifkan`);
+    } catch (e: any) {
+      toast.error(e?.message || "Gagal menonaktifkan akun");
+    }
   };
 
   return (
@@ -109,7 +114,7 @@ function AccountsPage() {
           />
         </div>
         <div className="text-xs text-muted-foreground">
-          Total akun Kasir: <span className="font-bold text-accent">{rows.length}</span>
+          Total akun: <span className="font-bold text-accent">{rows.length}</span>
         </div>
       </section>
 
@@ -127,7 +132,13 @@ function AccountsPage() {
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground text-sm">
+                    <Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Memuat akun…
+                  </td>
+                </tr>
+              ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground text-sm">
                     Tidak ada akun ditemukan.
@@ -140,14 +151,16 @@ function AccountsPage() {
                     <td className="px-4 py-3">{a.email}</td>
                     <td className="px-4 py-3">{a.phone ?? "—"}</td>
                     <td className="px-4 py-3">
-                      <span className="px-2 py-0.5 rounded bg-secondary text-accent text-xs font-semibold">
-                        Kasir
+                      <span className={`px-2 py-0.5 rounded text-xs font-semibold capitalize ${
+                        a.role === "owner" ? "bg-primary/15 text-primary" : "bg-secondary text-accent"
+                      }`}>
+                        {a.role}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold ${
-                          a.status === "verified"
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold capitalize ${
+                          a.status === "aktif"
                             ? "bg-primary/15 text-primary"
                             : "bg-muted text-muted-foreground"
                         }`}
@@ -158,9 +171,11 @@ function AccountsPage() {
                     <td className="px-4 py-3 text-right">
                       <button
                         onClick={() => setConfirmDelete(a)}
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 text-xs font-semibold"
+                        disabled={a.role === "owner"}
+                        title={a.role === "owner" ? "Akun owner tidak bisa dinonaktifkan di sini" : "Nonaktifkan akun"}
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
                       >
-                        <Trash2 className="w-3 h-3" /> Hapus
+                        <Trash2 className="w-3 h-3" /> Nonaktifkan
                       </button>
                     </td>
                   </tr>
@@ -249,9 +264,9 @@ function AccountsPage() {
                 <AlertTriangle className="w-5 h-5 text-destructive" />
               </div>
               <div className="flex-1">
-                <h2 className="text-base font-extrabold text-accent">Hapus Akun?</h2>
+                <h2 className="text-base font-extrabold text-accent">Nonaktifkan Akun?</h2>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Akun <strong className="text-accent">{confirmDelete.name}</strong> ({confirmDelete.email}) akan dihapus permanen.
+                  Akun <strong className="text-accent">{confirmDelete.name}</strong> ({confirmDelete.email}) akan dinonaktifkan dan tidak bisa login lagi.
                 </p>
               </div>
             </div>
@@ -266,7 +281,7 @@ function AccountsPage() {
                 onClick={confirmRemove}
                 className="px-4 py-2 rounded-lg bg-destructive text-destructive-foreground text-sm font-bold hover:opacity-90 inline-flex items-center gap-1.5"
               >
-                <Trash2 className="w-3.5 h-3.5" /> Hapus
+                <Trash2 className="w-3.5 h-3.5" /> Nonaktifkan
               </button>
             </div>
           </div>

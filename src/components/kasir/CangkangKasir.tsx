@@ -1,9 +1,22 @@
+/**
+ * ============================================================================
+ * CANGKANG KASIR (PosShell) — Layout utama halaman Kasir POS
+ * ============================================================================
+ * Membungkus seluruh halaman di bawah route `/pos/*`. Berisi:
+ *   - Header atas (logo + nama kasir + tombol toggle sidebar)
+ *   - Sidebar kiri (menu Beranda, Manajemen Produk, Riwayat, Pengaturan)
+ *   - Tombol "Kembali ke Admin" (hanya muncul untuk role owner)
+ *   - Tombol Keluar (logout)
+ *
+ * Komponen anak ditaruh di `<main>` melalui prop `children`.
+ * ============================================================================
+ */
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { Home, Package, History, Settings as SettingsIcon, ChevronDown, LogOut, Menu, X } from "lucide-react";
+import { Home, Package, History, Settings as SettingsIcon, ChevronDown, LogOut, Menu, X, ShieldCheck } from "lucide-react";
 import { useState, useEffect, type ReactNode } from "react";
 import logo from "@/assets/pos-logo.jpeg";
-import { actions, useStore, getCurrentUser, isOwner } from "@/lib/pos";
-import { logout } from "@/lib/pos";
+import { actions, useStore, getCurrentUser, isOwner } from "@/lib/kasir";
+import { logout } from "@/lib/kasir";
 
 const navMain = [{ to: "/pos", label: "Beranda", icon: Home }];
 const productSub = [
@@ -78,7 +91,7 @@ export function PosShell({ children }: { children: ReactNode }) {
 
           <button onClick={() => setOpenSub((v) => !v)}
             className={`w-full flex items-center justify-between px-5 py-3 rounded-full font-semibold transition ${
-              isProductSection ? "bg-accent text-maroon" : "text-maroon hover:bg-secondary"
+              isProductSection ? "bg-maroon text-primary-foreground" : "text-maroon hover:bg-secondary"
             }`}
           >
             <span className="flex items-center gap-3"><Package size={20} /> Manajemen Produk</span>
@@ -113,6 +126,14 @@ export function PosShell({ children }: { children: ReactNode }) {
         </nav>
 
         <div className="p-4 border-t border-border">
+          {owner && (
+            <Link
+              to="/admin"
+              className="mb-2 flex items-center gap-3 px-5 py-3 rounded-full bg-secondary text-maroon hover:bg-secondary/80 text-sm font-semibold transition"
+            >
+              <ShieldCheck size={18} /> Kembali ke Admin
+            </Link>
+          )}
           <a href="/" onClick={handleLogout}
             className="flex items-center gap-3 px-5 py-3 rounded-full text-maroon hover:bg-secondary text-sm font-semibold cursor-pointer">
             <LogOut size={18} /> Keluar
