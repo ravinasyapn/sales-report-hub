@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PosShell } from "@/components/pos/PosShell";
-import { isOwner } from "@/lib/pos";
+import { PosShell } from "@/components/kasir/CangkangKasir";
+import { isOwner } from "@/lib/kasir";
 import { useAppSettings, saveAppSettings } from "@/hooks/use-app-settings";
 import { Settings as SIcon, Save, ShieldAlert, Info } from "lucide-react";
 import { useEffect, useState } from "react";

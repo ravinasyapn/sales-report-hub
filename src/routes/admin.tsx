@@ -22,7 +22,7 @@ import {
   Check,
   ShieldCheck,
 } from "lucide-react";
-import logo from "@/assets/gurita-logo.png";
+import logo from "../assets/gurita-logo.png";
 import { useAdminRole, ROLE_KEY } from "@/hooks/use-admin-role";
 
 export { useAdminRole };
@@ -94,10 +94,12 @@ function AdminLayout() {
     navigate({ to: "/admin" });
   };
 
-  const activeRoleLabel =
+  const activeRoleLabel: "Admin User" | "Admin Kasir" | null =
     path.startsWith("/admin/user") || role === "user"
       ? "Admin User"
-      : "Admin Kasir";
+      : role === "kasir"
+        ? "Admin Kasir"
+        : null;
   const showKasirNav = role === "kasir" && !path.startsWith("/admin/user");
 
   const Sidebar = (
@@ -166,7 +168,7 @@ function AdminLayout() {
                       : "text-accent/85 hover:bg-secondary/60"
                   }`}
                 >
-                  <Icon className="w-[18px] h-[18px] shrink-0" />
+                  <Icon className="w-4.5 h-4.5 shrink-0" />
                   <span className="truncate">{item.label}</span>
                 </Link>
               );
@@ -186,7 +188,7 @@ function AdminLayout() {
               to="/pos"
               className="group flex items-center gap-3 px-4 py-3 rounded-full text-sm font-semibold text-accent/85 hover:bg-secondary/60 transition"
             >
-              <Wallet className="w-[18px] h-[18px] shrink-0" />
+              <Wallet className="w-4.5 h-4.5 shrink-0" />
               <span className="flex-1 truncate">Buka Kasir POS</span>
             </Link>
           </div>
@@ -220,7 +222,7 @@ function AdminLayout() {
         onClick={logout}
         className="m-3 flex items-center gap-3 px-4 py-3 rounded-full text-sm font-semibold text-accent/80 hover:bg-secondary/60 transition"
       >
-        <LogOut className="w-[18px] h-[18px]" /> Keluar
+        <LogOut className="w-4.5 h-4.5" /> Keluar
       </button>
     </aside>
   );

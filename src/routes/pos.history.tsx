@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { PosShell } from "@/components/pos/PosShell";
-import { useStore, formatIDR, isOwner } from "@/lib/pos";
+import { PosShell } from "@/components/kasir/CangkangKasir";
+import { useStore, formatIDR, isOwner } from "@/lib/kasir";
 import { Store, Search, Receipt as RIcon } from "lucide-react";
 
 export const Route = createFileRoute("/pos/history")({ component: History });
@@ -159,14 +159,12 @@ function History() {
             <div className="text-center border-b border-dashed border-border pb-3 mb-3">
               <RIcon className="mx-auto text-maroon mb-1" />
               <h3 className="font-display text-xl font-bold text-maroon">Detail Transaksi</h3>
-              <p className="text-xs text-maroon/60 font-mono">{selected.invoice}</p>
+              <p className="text-xs text-maroon/60 font-mono">{selected.id.slice(0, 8)}</p>
             </div>
             <div className="text-xs space-y-1 text-maroon mb-3">
-              <div className="flex justify-between"><span>No. Struk</span><span className="font-mono">{selected.invoice}</span></div>
               <div className="flex justify-between"><span>Tanggal</span><span>{new Date(selected.date).toLocaleString("id-ID")}</span></div>
               <div className="flex justify-between"><span>Pelanggan</span><span>{selected.customer}</span></div>
               <div className="flex justify-between"><span>Metode</span><span>{selected.method}</span></div>
-              <div className="flex justify-between"><span>Status</span><span className="font-semibold">{selected.status}</span></div>
               <div className="flex justify-between"><span>Kasir</span><span className="font-semibold">{selected.cashier_name || "Kasir"}</span></div>
             </div>
             <div className="border-t border-dashed border-border pt-3 space-y-2 text-sm">

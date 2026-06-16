@@ -112,7 +112,7 @@ function SettingsPage() {
           <select
             value={presetId}
             onChange={(e) => applyPreset(e.target.value)}
-            className="w-full rounded-xl bg-input/60 border border-border px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[var(--brand-sage)] transition"
+            className="w-full rounded-xl bg-input/60 border border-border px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-(--brand-sage) transition"
           >
             <option value="">[ Pilih Event dari Jadwal ]</option>
             {EVENT_PRESETS.map((p) => (
@@ -128,7 +128,7 @@ function SettingsPage() {
             type="checkbox"
             checked={useManual}
             onChange={(e) => setUseManual(e.target.checked)}
-            className="w-4 h-4 accent-[var(--accent)]"
+            className="w-4 h-4 accent-accent"
           />
           <span className="text-sm font-semibold text-accent flex items-center gap-1.5">
             <PencilLine className="w-3.5 h-3.5" />
@@ -175,7 +175,7 @@ function SettingsPage() {
             Simpan Pengaturan
           </button>
           {saved && (
-            <span className="inline-flex items-center gap-1.5 text-sm text-[var(--brand-sage)] font-semibold">
+            <span className="inline-flex items-center gap-1.5 text-sm text-(--brand-sage) font-semibold">
               <Check className="w-4 h-4" /> Tersimpan & tersinkron
             </span>
           )}
@@ -241,7 +241,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl bg-input/60 border border-border px-4 py-3 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-[var(--brand-sage)] transition"
+        className="w-full rounded-xl bg-input/60 border border-border px-4 py-3 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-(--brand-sage) transition"
       />
     </label>
   );

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useStore, actions } from "@/lib/kasir";
 import {
   Printer,
   Calendar as CalendarIcon,
@@ -21,24 +22,19 @@ export const Route = createFileRoute("/admin/reports")({
 });
 
 // ============================================================
-// Types
+// Types (bentuk internal halaman — diisi dari data ASLI store)
 // ============================================================
 type PayMethod = "tunai" | "qris";
-
-type EventDay = {
-  date: string; // YYYY-MM-DD
-  name: string; // e.g. "Workshop Bouquet Vol. 3"
-};
 
 type Tx = {
   id: string;
   receipt_no: string;
-  event_date: string; // YYYY-MM-DD
+  event_date: string; // YYYY-MM-DD (lokal)
   customer_name: string;
   cashier_id: string;
   cashier_name: string;
   payment_method: PayMethod;
-  peserta: number; // jumlah peserta workshop
+  peserta: number;
   total_amount: number;
   created_at: string;
 };
@@ -55,8 +51,8 @@ type Item = {
 type CashCount = {
   cashier_id: string;
   date: string; // YYYY-MM-DD
-  expected_cash: number; // dihitung dari transaksi tunai
-  counted_cash: number; // hasil hitung fisik kasir
+  expected_cash: number;
+  counted_cash: number;
   note: string;
 };
 
@@ -64,6 +60,8 @@ type CashCount = {
 // Helpers
 // ============================================================
 const fmt = (n: number) => "Rp " + Number(n || 0).toLocaleString("id-ID");
+const pad = (n: number) => String(n).padStart(2, "0");
+const ymd = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const fmtDate = (s: string) =>
   new Date(s + "T00:00:00").toLocaleDateString("id-ID", {
     day: "2-digit",
@@ -78,107 +76,23 @@ const fmtMonth = (m: string) =>
   });
 
 // ============================================================
-// MOCK DATA — 3 event days dalam bulan berjalan
-// ============================================================
-const EVENTS: EventDay[] = [
-  { date: "2026-05-04", name: "Workshop Bouquet Vol. 1" },
-  { date: "2026-05-17", name: "Workshop Bouquet Vol. 2" },
-  { date: "2026-05-28", name: "Workshop Bouquet Vol. 3" },
-];
-
-const CASHIERS = [
-  { id: "c1", name: "Salsabila Putri" },
-  { id: "c2", name: "Rangga Pratama" },
-  { id: "c3", name: "Naila Rahmadhani" },
-];
-
-const PRODUCTS = [
-  { name: "Mawar Merah", category: "Bunga Tangkai", price: 15000 },
-  { name: "Mawar Putih", category: "Bunga Tangkai", price: 20000 },
-  { name: "Baby Breath", category: "Bunga Tangkai", price: 10000 },
-  { name: "Lily Putih", category: "Bunga Tangkai", price: 30000 },
-  { name: "Tulip", category: "Bunga Tangkai", price: 25000 },
-  { name: "Kertas Wrapping", category: "Bahan", price: 8000 },
-  { name: "Pita Satin", category: "Bahan", price: 5000 },
-  { name: "Snack Box", category: "F&B", price: 18000 },
-];
-
-// generator: deterministic mock
-function generate(): { txs: Tx[]; items: Item[]; counts: CashCount[] } {
-  const txs: Tx[] = [];
-  const items: Item[] = [];
-  const counts: CashCount[] = [];
-  let nTx = 1;
-
-  EVENTS.forEach((ev, ei) => {
-    CASHIERS.forEach((cs, ci) => {
-      // 4 transaksi per kasir per event
-      const txCount = 3 + ((ei + ci) % 3);
-      let expectedCash = 0;
-      for (let i = 0; i < txCount; i++) {
-        const isCash = (i + ci + ei) % 2 === 0;
-        const peserta = 1 + ((i + ei) % 3); // 1..3 peserta
-        const productPicks = 2 + (i % 2);
-        const itemRows: Item[] = [];
-        let total = 0;
-        for (let p = 0; p < productPicks; p++) {
-          const prod = PRODUCTS[(i * 3 + p + ci + ei) % PRODUCTS.length];
-          const qty = 1 + ((p + i) % 4);
-          const subtotal = prod.price * qty;
-          itemRows.push({
-            transaction_id: "",
-            product_name: prod.name,
-            category: prod.category,
-            qty,
-            price: prod.price,
-            subtotal,
-          });
-          total += subtotal;
-        }
-        const txId = `t${nTx}`;
-        const receipt = `GB-${ev.date.replaceAll("-", "").slice(4)}-${String(nTx).padStart(3, "0")}`;
-        const hour = 9 + i;
-        txs.push({
-          id: txId,
-          receipt_no: receipt,
-          event_date: ev.date,
-          customer_name: ["Anisa", "Rio", "Dewi", "Bagus", "Mira", "Fahmi", "Citra", "Yoga"][nTx % 8],
-          cashier_id: cs.id,
-          cashier_name: cs.name,
-          payment_method: isCash ? "tunai" : "qris",
-          peserta,
-          total_amount: total,
-          created_at: `${ev.date}T${String(hour).padStart(2, "0")}:${String((i * 13) % 60).padStart(2, "0")}:00`,
-        });
-        itemRows.forEach((it) => items.push({ ...it, transaction_id: txId }));
-        if (isCash) expectedCash += total;
-        nTx++;
-      }
-      // selisih kecil acak utk demo (kadang plus, kadang minus)
-      const drift = ((ci + ei) % 3) - 1; // -1, 0, 1
-      counts.push({
-        cashier_id: cs.id,
-        date: ev.date,
-        expected_cash: expectedCash,
-        counted_cash: expectedCash + drift * 5000,
-        note: drift === 0 ? "Kas sesuai" : drift < 0 ? "Kurang Rp 5.000 — kembalian pelanggan" : "Lebih Rp 5.000 — tip pelanggan",
-      });
-    });
-  });
-
-  return { txs, items, counts };
-}
-
-const DATA = generate();
-
-// ============================================================
 // Page
 // ============================================================
 type ViewMode = "event" | "bulanan";
 
 function ReportsPage() {
-  const [from, setFrom] = useState("2026-05-01");
-  const [to, setTo] = useState("2026-05-31");
+  // --- Data ASLI dari store (terhubung ke backend Laravel via /api/transaksi) ---
+  const { transactions, products, categories, settings, usingDummy } = useStore();
+
+  // Pastikan data tersinkron walau owner langsung membuka halaman ini.
+  useEffect(() => {
+    actions.syncAll();
+  }, []);
+
+  // Default rentang: dari awal bulan berjalan s/d hari ini.
+  const now = new Date();
+  const [from, setFrom] = useState(ymd(new Date(now.getFullYear(), now.getMonth(), 1)));
+  const [to, setTo] = useState(ymd(now));
   const [mode, setMode] = useState<ViewMode>("event");
   const [globalNote, setGlobalNote] = useState(
     "Audit kas akhir hari oleh supervisor. Periksa selisih > Rp 10.000.",
@@ -186,14 +100,77 @@ function ReportsPage() {
   const [cashierNotes, setCashierNotes] = useState<Record<string, string>>({});
   const [countOverrides, setCountOverrides] = useState<Record<string, number>>({});
 
+  // Lookup kategori berdasarkan nama produk (item_transaksi tidak menyimpan kategori).
+  const categoryOf = useMemo(() => {
+    const byName = new Map(products.map((p) => [p.name, p.categoryId]));
+    const catName = new Map(categories.map((c) => [c.id, c.name]));
+    return (productName: string) => {
+      const catId = byName.get(productName);
+      return (catId && catName.get(catId)) || "—";
+    };
+  }, [products, categories]);
+
+  // --- Adaptor: transaksi asli -> bentuk Tx / Item yang dipakai tabel di bawah ---
+  const allTxs: Tx[] = useMemo(
+    () =>
+      transactions.map((t) => {
+        const d = new Date(t.date);
+        const eventDate = isNaN(d.getTime()) ? to : ymd(d);
+        const kasir = t.cashier_name || "Kasir";
+        return {
+          id: String(t.id),
+          receipt_no: String(t.id),
+          event_date: eventDate,
+          customer_name: t.customer,
+          cashier_id: kasir, // tanpa tabel kasir terpisah, pakai nama sebagai kunci
+          cashier_name: kasir,
+          payment_method: (t.method === "QRIS" ? "qris" : "tunai") as PayMethod,
+          peserta: 0, // DB tidak melacak peserta workshop
+          total_amount: t.subtotal,
+          created_at: t.date,
+        };
+      }),
+    [transactions, to],
+  );
+
+  const allItems: Item[] = useMemo(
+    () =>
+      transactions.flatMap((t) =>
+        (t.items || []).map((i) => ({
+          transaction_id: String(t.id),
+          product_name: i.name,
+          category: categoryOf(i.name),
+          qty: i.qty,
+          price: i.price,
+          subtotal: i.qty * i.price,
+        })),
+      ),
+    [transactions, categoryOf],
+  );
+
+  // Audit kas: ekspektasi tunai dihitung dari transaksi tunai per kasir per hari.
+  const allCounts: CashCount[] = useMemo(() => {
+    const map = new Map<string, CashCount>();
+    for (const t of allTxs) {
+      if (t.payment_method !== "tunai") continue;
+      const key = `${t.cashier_id}__${t.event_date}`;
+      const cur =
+        map.get(key) ??
+        { cashier_id: t.cashier_id, date: t.event_date, expected_cash: 0, counted_cash: 0, note: "" };
+      cur.expected_cash += t.total_amount;
+      map.set(key, cur);
+    }
+    return Array.from(map.values()).map((c) => ({ ...c, counted_cash: c.expected_cash }));
+  }, [allTxs]);
+
   const inRange = (d: string) => d >= from && d <= to;
 
-  const txs = useMemo(() => DATA.txs.filter((t) => inRange(t.event_date)), [from, to]);
+  const txs = useMemo(() => allTxs.filter((t) => inRange(t.event_date)), [allTxs, from, to]);
   const items = useMemo(() => {
     const txIds = new Set(txs.map((t) => t.id));
-    return DATA.items.filter((i) => txIds.has(i.transaction_id));
-  }, [txs]);
-  const counts = useMemo(() => DATA.counts.filter((c) => inRange(c.date)), [from, to]);
+    return allItems.filter((i) => txIds.has(i.transaction_id));
+  }, [allItems, txs]);
+  const counts = useMemo(() => allCounts.filter((c) => inRange(c.date)), [allCounts, from, to]);
 
   // ---------- Header totals ----------
   const totals = useMemo(() => {
@@ -251,12 +228,11 @@ function ReportsPage() {
     if (mode === "event") {
       const map = new Map<string, RecapRow>();
       for (const t of txs) {
-        const ev = EVENTS.find((e) => e.date === t.event_date);
         const cur =
           map.get(t.event_date) ?? {
             key: t.event_date,
             label: fmtDate(t.event_date),
-            sub: ev?.name ?? "—",
+            sub: settings.shopName || "Penjualan harian",
             tx: 0,
             peserta: 0,
             tunai: 0,
@@ -295,23 +271,22 @@ function ReportsPage() {
       map.set(k, cur);
     }
     return Array.from(map.values()).sort((a, b) => a.key.localeCompare(b.key));
-  }, [txs, mode]);
+  }, [txs, mode, settings.shopName]);
 
   // ---------- Audit selisih ----------
   const auditRows = useMemo(() => {
     return counts.map((c) => {
-      const cs = CASHIERS.find((x) => x.id === c.cashier_id);
       const key = `${c.cashier_id}-${c.date}`;
       const counted = countOverrides[key] ?? c.counted_cash;
       const selisih = counted - c.expected_cash;
       return {
         key,
         date: c.date,
-        cashier: cs?.name ?? c.cashier_id,
+        cashier: c.cashier_id,
         expected: c.expected_cash,
         counted,
         selisih,
-        defaultNote: c.note,
+        defaultNote: c.note || "Masukkan hasil hitung kas fisik",
       };
     });
   }, [counts, countOverrides]);
@@ -338,6 +313,11 @@ function ReportsPage() {
           <p className="text-sm text-foreground/70 max-w-xl">
             Audit kas, rekap event, dan restock produk — Gurita Bouquet.
           </p>
+          {usingDummy && (
+            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 inline-block">
+              Menampilkan data contoh — backend belum mengirim data (tambahkan produk &amp; transaksi asli untuk data nyata).
+            </p>
+          )}
         </div>
         <button
           onClick={handlePrint}
@@ -352,7 +332,7 @@ function ReportsPage() {
       <div className="hidden print:block">
         <div className="text-center border-b-2 border-black pb-3 mb-4">
           <div className="text-xl font-extrabold tracking-tight">GURITA BOUQUET</div>
-          <div className="text-sm font-semibold mt-0.5">Laporan Penjualan & Audit Kas</div>
+          <div className="text-sm font-semibold mt-0.5">Laporan Penjualan &amp; Audit Kas</div>
           <div className="text-xs mt-1">
             Periode {fmtDate(from)} — {fmtDate(to)} · Mode:{" "}
             {mode === "event" ? "Rekap per Event" : "Rekap Bulanan"}
@@ -371,9 +351,9 @@ function ReportsPage() {
         />
         <StatCard
           icon={Users}
-          label="Total Peserta"
-          value={totals.peserta.toLocaleString("id-ID")}
-          hint="Workshop & walk-in"
+          label="Total Transaksi"
+          value={totals.count.toLocaleString("id-ID")}
+          hint="Struk pada periode ini"
           tone="secondary"
         />
         <StatCard
@@ -416,10 +396,10 @@ function ReportsPage() {
       {/* ============ Recap table (event / bulanan) ============ */}
       <Section
         icon={ClipboardList}
-        title={mode === "event" ? "Rekap per Event (Harian)" : "Rekap Bulanan"}
+        title={mode === "event" ? "Rekap per Hari" : "Rekap Bulanan"}
         sub={
           mode === "event"
-            ? "Setiap baris merepresentasikan satu hari event."
+            ? "Setiap baris merepresentasikan satu hari penjualan."
             : "Agregasi seluruh transaksi per bulan."
         }
       >
@@ -427,9 +407,8 @@ function ReportsPage() {
           <THead>
             <TR>
               <TH>{mode === "event" ? "Tanggal" : "Bulan"}</TH>
-              <TH>{mode === "event" ? "Nama Event" : "Keterangan"}</TH>
+              <TH>{mode === "event" ? "Keterangan" : "Keterangan"}</TH>
               <TH className="text-right">Transaksi</TH>
-              <TH className="text-right">Peserta</TH>
               <TH className="text-right">Tunai</TH>
               <TH className="text-right">QRIS</TH>
               <TH className="text-right">Total</TH>
@@ -441,20 +420,18 @@ function ReportsPage() {
                 <TD className="font-semibold text-accent">{r.label}</TD>
                 <TD className="text-foreground/70">{r.sub}</TD>
                 <TD className="text-right tabular-nums">{r.tx}</TD>
-                <TD className="text-right tabular-nums">{r.peserta}</TD>
                 <TD className="text-right tabular-nums">{fmt(r.tunai)}</TD>
                 <TD className="text-right tabular-nums">{fmt(r.qris)}</TD>
                 <TD className="text-right tabular-nums font-bold">{fmt(r.total)}</TD>
               </TR>
             ))}
-            {recapRows.length === 0 && <EmptyRow cols={7} />}
+            {recapRows.length === 0 && <EmptyRow cols={6} />}
           </tbody>
           <TFoot
             cells={[
               "Total",
               "",
               recapRows.reduce((s, r) => s + r.tx, 0).toString(),
-              recapRows.reduce((s, r) => s + r.peserta, 0).toString(),
               fmt(recapRows.reduce((s, r) => s + r.tunai, 0)),
               fmt(recapRows.reduce((s, r) => s + r.qris, 0)),
               fmt(recapRows.reduce((s, r) => s + r.total, 0)),
@@ -467,7 +444,7 @@ function ReportsPage() {
       <Section
         icon={UserCog}
         title="Rekap per Kasir & Audit Selisih Kas"
-        sub="Selisih = Uang Fisik (counted) - Ekspektasi Tunai. Edit kolom 'Uang Fisik' untuk mensimulasikan hasil hitung kasir."
+        sub="Selisih = Uang Fisik (counted) - Ekspektasi Tunai. Edit kolom 'Uang Fisik' untuk mencatat hasil hitung kasir."
       >
         <Table>
           <THead>
@@ -603,7 +580,6 @@ function ReportsPage() {
               <TH>No. Struk</TH>
               <TH>Pelanggan</TH>
               <TH>Kasir</TH>
-              <TH className="text-right">Peserta</TH>
               <TH>Metode</TH>
               <TH className="text-right">Total</TH>
             </TR>
@@ -611,7 +587,7 @@ function ReportsPage() {
           <tbody>
             {txs
               .slice()
-              .sort((a, b) => a.created_at.localeCompare(b.created_at))
+              .sort((a, b) => b.created_at.localeCompare(a.created_at))
               .map((t) => (
                 <TR key={t.id}>
                   <TD className="tabular-nums">
@@ -626,7 +602,6 @@ function ReportsPage() {
                   <TD className="font-mono text-xs text-accent">{t.receipt_no}</TD>
                   <TD>{t.customer_name}</TD>
                   <TD className="text-foreground/70">{t.cashier_name}</TD>
-                  <TD className="text-right tabular-nums">{t.peserta}</TD>
                   <TD>
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ${
@@ -646,7 +621,7 @@ function ReportsPage() {
                   <TD className="text-right tabular-nums font-bold">{fmt(t.total_amount)}</TD>
                 </TR>
               ))}
-            {txs.length === 0 && <EmptyRow cols={7} />}
+            {txs.length === 0 && <EmptyRow cols={6} />}
           </tbody>
         </Table>
       </Section>
@@ -805,16 +780,14 @@ function Section({
 }
 
 function Table({ children }: { children: React.ReactNode }) {
-  return (
-    <table className="w-full text-sm border-collapse">{children}</table>
-  );
+  return <table className="w-full text-sm border-collapse">{children}</table>;
 }
 function THead({ children }: { children: React.ReactNode }) {
   return <thead className="bg-secondary/50 print:bg-transparent">{children}</thead>;
 }
-function TR({ children, key }: { children: React.ReactNode; key?: string }) {
+function TR({ children }: { children: React.ReactNode }) {
   return (
-    <tr key={key} className="border-b border-border last:border-b-0 hover:bg-secondary/20 print:hover:bg-transparent">
+    <tr className="border-b border-border last:border-b-0 hover:bg-secondary/20 print:hover:bg-transparent">
       {children}
     </tr>
   );

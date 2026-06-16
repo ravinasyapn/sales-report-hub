@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { AuthLayout } from "@/components/AuthLayout";
+import { login } from "@/lib/kasir";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -14,39 +15,46 @@ export const Route = createFileRoute("/")({
   component: LoginPage,
 });
 
-// Owner credentials → diarahkan ke /admin; selain itu → role kasir → /pos
-const ADMIN_EMAILS = ["owner@gurita.com", "admin@gurita.com"];
-const ADMIN_PASSWORD = "admin123";
-
 function LoginPage() {
   const navigate = useNavigate();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!identifier || !password) return;
+    if (!identifier || !password || loading) return;
 
-    const id = identifier.trim().toLowerCase();
-    if (ADMIN_EMAILS.includes(id)) {
-      if (password !== ADMIN_PASSWORD) { toast.error("Password admin salah"); return; }
-      const ownerData = { name: "Owner", email: id, role: "owner" };
-      sessionStorage.setItem("gb_admin", "1");
-      sessionStorage.setItem("gb_admin_role", "user");
-      localStorage.setItem("user-data", JSON.stringify(ownerData));
-      localStorage.setItem("user", JSON.stringify(ownerData));
+    setLoading(true);
+    try {
+      // Login asli ke backend Laravel (/api/login). Token disimpan otomatis oleh auth.set().
+      const user = await login({ email: identifier.trim(), password });
+      const role: "owner" | "kasir" = user?.role === "owner" ? "owner" : "kasir";
+      const data = {
+        name: user?.name || "Pengguna",
+        email: user?.email || identifier.trim(),
+        role,
+      };
+      localStorage.setItem("user-data", JSON.stringify(data));
+      localStorage.setItem("user", JSON.stringify(data));
       window.dispatchEvent(new Event("gb-role-changed"));
-      toast.success("Selamat datang, Owner!");
-      navigate({ to: "/admin" });
-      return;
+
+      if (role === "owner") {
+        sessionStorage.setItem("gb_admin", "1");
+        sessionStorage.removeItem("gb_admin_role"); // selalu mulai dari layar "Selamat Datang"
+        toast.success("Selamat datang, Owner!");
+        navigate({ to: "/admin" });
+      } else {
+        sessionStorage.removeItem("gb_admin");
+        toast.success(`Selamat datang, ${data.name}!`);
+        navigate({ to: "/pos" });
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Email atau password salah.");
+    } finally {
+      setLoading(false);
     }
-    sessionStorage.removeItem("gb_admin");
-    const kasirData = { name: identifier.trim() || "Kasir", email: id, role: "kasir" };
-    localStorage.setItem("user-data", JSON.stringify(kasirData));
-    localStorage.setItem("user", JSON.stringify(kasirData));
-    toast.success("Selamat datang, Kasir!");
-    navigate({ to: "/pos" });
   };
 
   return (
@@ -57,12 +65,13 @@ function LoginPage() {
         </h2>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-maroon">Email / No. Telepon</label>
+          <label className="text-sm font-bold text-maroon">Email</label>
           <input
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            placeholder="Masukan email atau nomor telepon kamu"
+            placeholder="Masukan email kamu"
             className="input-pill"
+            type="email"
             required
           />
         </div>
@@ -95,8 +104,8 @@ function LoginPage() {
         </div>
 
         <div className="flex flex-col items-center gap-3 pt-2">
-          <button type="submit" className="w-full btn-olive py-3 text-base font-bold">
-            Masuk
+          <button type="submit" disabled={loading} className="w-full btn-olive py-3 text-base font-bold disabled:opacity-50">
+            {loading ? "Memproses..." : "Masuk"}
           </button>
           <p className="text-sm font-semibold text-maroon">
             Belum punya akun?{" "}
@@ -105,7 +114,7 @@ function LoginPage() {
             </Link>
           </p>
           <p className="text-[11px] text-maroon/60 text-center">
-            Owner: <span className="font-mono">owner@gurita.com</span> /{" "}
+            Owner default: <span className="font-mono">owner@gurita.com</span> /{" "}
             <span className="font-mono">admin123</span>
           </p>
         </div>
