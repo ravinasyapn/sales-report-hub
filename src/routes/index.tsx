@@ -113,10 +113,10 @@ function LoginPage() {
               Daftar
             </Link>
           </p>
-          <p className="text-[11px] text-maroon/60 text-center">
-            Owner default: <span className="font-mono">owner@gurita.com</span> /{" "}
-            <span className="font-mono">admin123</span>
-          </p>
+          <div className="text-[11px] text-maroon/60 text-center space-y-0.5">
+            <p>Owner: <span className="font-mono">owner@gurita.com</span> / <span className="font-mono">admin123</span></p>
+            <p>Kasir: <span className="font-mono">kasir@gurita.com</span> / <span className="font-mono">kasir123</span></p>
+          </div>
         </div>
       </form>
     </AuthLayout>
