@@ -107,8 +107,8 @@ function AdminLayout() {
       {/* Brand card */}
       <div className="px-4 pt-5">
         <div className="relative rounded-2xl bg-secondary/70 border border-border px-4 py-3 flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center overflow-hidden shrink-0">
-            <img src={logo} alt="Gurita" className="w-9 h-9 object-contain" />
+          <div className="w-12 h-12 rounded-full bg-card border border-border overflow-hidden shrink-0 aspect-square">
+            <img src={logo} alt="Gurita" className="w-full h-full object-cover rounded-full" />
           </div>
           <div className="min-w-0 flex-1">
             <div className="font-extrabold text-accent text-[15px] leading-tight tracking-tight truncate">

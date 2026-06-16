@@ -81,7 +81,7 @@ function AccountsPage() {
   };
 
   return (
-    <div className="p-5 sm:p-8 lg:p-12 max-w-4xl mx-auto space-y-8">
+    <div className="p-5 sm:p-8 lg:p-12 max-w-6xl mx-auto space-y-8">
       <header className="space-y-2">
         <div className="text-[10px] uppercase tracking-[0.22em] font-bold text-accent/70 flex items-center gap-2">
           <KeyRound className="w-3 h-3" /> Manajemen
