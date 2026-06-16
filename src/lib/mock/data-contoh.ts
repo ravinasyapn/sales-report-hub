@@ -36,18 +36,22 @@ export const DUMMY_PRODUCTS: ApiProduct[] = [
 export const DUMMY_TRANSACTIONS: ApiTransaction[] = [
   {
     id: "tx-1001",
+    invoice: "INV-20260531-1001",
     date: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
     customer: "Ayu",
     method: "Tunai",
+    status: "Lunas",
     items: [{ name: "Mawar Merah", qty: 10, price: 12000, unit: "tangkai" }],
     subtotal: 120000, paid: 150000, change: 30000,
     cashier_name: "Kasir Demo",
   },
   {
     id: "tx-1002",
+    invoice: "INV-20260530-1002",
     date: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString(),
     customer: "Rian",
     method: "QRIS",
+    status: "Lunas",
     items: [
       { name: "Tulip Pink", qty: 5, price: 22000, unit: "tangkai" },
       { name: "Wrapping Korean", qty: 1, price: 12000, unit: "lembar" },
