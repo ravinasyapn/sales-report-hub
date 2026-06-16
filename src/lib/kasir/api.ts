@@ -66,18 +66,45 @@ const idStr = (v: any) => String(v ?? "");
 // ---------- Auth ----------
 export type AuthUser = { name: string; email: string; role: "owner" | "kasir" };
 
+// Akun demo lokal — dipakai bila backend Laravel tidak tersedia (mis. di preview Lovable).
+const DEMO_ACCOUNTS: Array<AuthUser & { password: string }> = [
+  { email: "owner@gurita.com",   password: "admin123",   name: "Owner Gurita",  role: "owner" },
+  { email: "kasir@gurita.com",   password: "kasir123",   name: "Kasir Volunteer", role: "kasir" },
+  { email: "volunteer@gurita.com", password: "volunteer123", name: "Volunteer Kasir", role: "kasir" },
+];
+
+function demoLogin(payload: { email: string; password: string }): AuthUser | null {
+  const email = payload.email.trim().toLowerCase();
+  const acc = DEMO_ACCOUNTS.find((a) => a.email.toLowerCase() === email && a.password === payload.password);
+  if (!acc) return null;
+  auth.set(`demo-${acc.role}-${Date.now()}`);
+  return { name: acc.name, email: acc.email, role: acc.role };
+}
+
 export async function login(payload: { email: string; password: string }): Promise<AuthUser | null> {
-  const d = await api<any>("/login", { method: "POST", body: JSON.stringify(payload) });
-  const token = d.token ?? d.access_token ?? d?.data?.token;
-  if (!token) throw new ApiError(200, "Token tidak ditemukan pada respons login");
-  auth.set(token);
-  const u = d.pengguna ?? d.user ?? d?.data?.pengguna ?? null;
-  if (!u) return null;
-  return {
-    name: u.nama_lengkap ?? u.name ?? "",
-    email: u.email ?? "",
-    role: (u.peran ?? u.role ?? "kasir") as "owner" | "kasir",
-  };
+  try {
+    const d = await api<any>("/login", { method: "POST", body: JSON.stringify(payload) });
+    const token = d.token ?? d.access_token ?? d?.data?.token;
+    if (!token) throw new ApiError(200, "Token tidak ditemukan pada respons login");
+    auth.set(token);
+    const u = d.pengguna ?? d.user ?? d?.data?.pengguna ?? null;
+    if (!u) return null;
+    return {
+      name: u.nama_lengkap ?? u.name ?? "",
+      email: u.email ?? "",
+      role: (u.peran ?? u.role ?? "kasir") as "owner" | "kasir",
+    };
+  } catch (err: any) {
+    // Backend tidak tersedia (network error) ATAU kredensial backend ditolak →
+    // coba akun demo lokal supaya login owner/kasir tetap bisa di preview.
+    const isNetworkError = !(err instanceof ApiError);
+    const isAuthError = err instanceof ApiError && (err.status === 401 || err.status === 422 || err.status === 404 || err.status === 0);
+    if (isNetworkError || isAuthError) {
+      const demo = demoLogin(payload);
+      if (demo) return demo;
+    }
+    throw err;
+  }
 }
 
 export async function logout() {
