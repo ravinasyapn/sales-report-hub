@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WireframeRouteImport } from './routes/wireframe'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PosRouteImport } from './routes/pos'
@@ -28,6 +29,11 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 
+const WireframeRoute = WireframeRouteImport.update({
+  id: '/wireframe',
+  path: '/wireframe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/pos': typeof PosRouteWithChildren
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/wireframe': typeof WireframeRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/products': typeof AdminProductsRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/wireframe': typeof WireframeRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/products': typeof AdminProductsRoute
@@ -165,6 +173,7 @@ export interface FileRoutesById {
   '/pos': typeof PosRouteWithChildren
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/wireframe': typeof WireframeRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/products': typeof AdminProductsRoute
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/pos'
     | '/register'
     | '/reset-password'
+    | '/wireframe'
     | '/admin/accounts'
     | '/admin/login'
     | '/admin/products'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/register'
     | '/reset-password'
+    | '/wireframe'
     | '/admin/accounts'
     | '/admin/login'
     | '/admin/products'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/pos'
     | '/register'
     | '/reset-password'
+    | '/wireframe'
     | '/admin/accounts'
     | '/admin/login'
     | '/admin/products'
@@ -246,10 +258,18 @@ export interface RootRouteChildren {
   PosRoute: typeof PosRouteWithChildren
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  WireframeRoute: typeof WireframeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wireframe': {
+      id: '/wireframe'
+      path: '/wireframe'
+      fullPath: '/wireframe'
+      preLoaderRoute: typeof WireframeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
@@ -426,17 +446,8 @@ const rootRouteChildren: RootRouteChildren = {
   PosRoute: PosRouteWithChildren,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  WireframeRoute: WireframeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
