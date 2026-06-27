@@ -153,7 +153,7 @@ function AdminUserLayout() {
         <div className="space-y-1.5">
           {USER_LINKS.map((item) => {
             const Icon = item.icon;
-            const active = isActive(item.to, item.exact);
+            const active = isActive(item.to, "exact" in item ? item.exact : false);
             return (
               <Link
                 key={item.to}
