@@ -28,6 +28,11 @@ import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
+import { Route as AdminUserIndexRouteImport } from './routes/admin.user.index'
+import { Route as AdminUserVolunteerRouteImport } from './routes/admin.user.volunteer'
+import { Route as AdminUserReportsRouteImport } from './routes/admin.user.reports'
+import { Route as AdminUserPesertaRouteImport } from './routes/admin.user.peserta'
+import { Route as AdminUserEventsRouteImport } from './routes/admin.user.events'
 
 const WireframeRoute = WireframeRouteImport.update({
   id: '/wireframe',
@@ -124,6 +129,31 @@ const AdminAccountsRoute = AdminAccountsRouteImport.update({
   path: '/accounts',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminUserIndexRoute = AdminUserIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminUserRoute,
+} as any)
+const AdminUserVolunteerRoute = AdminUserVolunteerRouteImport.update({
+  id: '/volunteer',
+  path: '/volunteer',
+  getParentRoute: () => AdminUserRoute,
+} as any)
+const AdminUserReportsRoute = AdminUserReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AdminUserRoute,
+} as any)
+const AdminUserPesertaRoute = AdminUserPesertaRouteImport.update({
+  id: '/peserta',
+  path: '/peserta',
+  getParentRoute: () => AdminUserRoute,
+} as any)
+const AdminUserEventsRoute = AdminUserEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => AdminUserRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -138,13 +168,18 @@ export interface FileRoutesByFullPath {
   '/admin/products': typeof AdminProductsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/user': typeof AdminUserRoute
+  '/admin/user': typeof AdminUserRouteWithChildren
   '/pos/categories': typeof PosCategoriesRoute
   '/pos/history': typeof PosHistoryRoute
   '/pos/products': typeof PosProductsRoute
   '/pos/settings': typeof PosSettingsRoute
   '/admin/': typeof AdminIndexRoute
   '/pos/': typeof PosIndexRoute
+  '/admin/user/events': typeof AdminUserEventsRoute
+  '/admin/user/peserta': typeof AdminUserPesertaRoute
+  '/admin/user/reports': typeof AdminUserReportsRoute
+  '/admin/user/volunteer': typeof AdminUserVolunteerRoute
+  '/admin/user/': typeof AdminUserIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -157,13 +192,17 @@ export interface FileRoutesByTo {
   '/admin/products': typeof AdminProductsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/user': typeof AdminUserRoute
   '/pos/categories': typeof PosCategoriesRoute
   '/pos/history': typeof PosHistoryRoute
   '/pos/products': typeof PosProductsRoute
   '/pos/settings': typeof PosSettingsRoute
   '/admin': typeof AdminIndexRoute
   '/pos': typeof PosIndexRoute
+  '/admin/user/events': typeof AdminUserEventsRoute
+  '/admin/user/peserta': typeof AdminUserPesertaRoute
+  '/admin/user/reports': typeof AdminUserReportsRoute
+  '/admin/user/volunteer': typeof AdminUserVolunteerRoute
+  '/admin/user': typeof AdminUserIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -179,13 +218,18 @@ export interface FileRoutesById {
   '/admin/products': typeof AdminProductsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/user': typeof AdminUserRoute
+  '/admin/user': typeof AdminUserRouteWithChildren
   '/pos/categories': typeof PosCategoriesRoute
   '/pos/history': typeof PosHistoryRoute
   '/pos/products': typeof PosProductsRoute
   '/pos/settings': typeof PosSettingsRoute
   '/admin/': typeof AdminIndexRoute
   '/pos/': typeof PosIndexRoute
+  '/admin/user/events': typeof AdminUserEventsRoute
+  '/admin/user/peserta': typeof AdminUserPesertaRoute
+  '/admin/user/reports': typeof AdminUserReportsRoute
+  '/admin/user/volunteer': typeof AdminUserVolunteerRoute
+  '/admin/user/': typeof AdminUserIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -209,6 +253,11 @@ export interface FileRouteTypes {
     | '/pos/settings'
     | '/admin/'
     | '/pos/'
+    | '/admin/user/events'
+    | '/admin/user/peserta'
+    | '/admin/user/reports'
+    | '/admin/user/volunteer'
+    | '/admin/user/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,13 +270,17 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/admin/reports'
     | '/admin/settings'
-    | '/admin/user'
     | '/pos/categories'
     | '/pos/history'
     | '/pos/products'
     | '/pos/settings'
     | '/admin'
     | '/pos'
+    | '/admin/user/events'
+    | '/admin/user/peserta'
+    | '/admin/user/reports'
+    | '/admin/user/volunteer'
+    | '/admin/user'
   id:
     | '__root__'
     | '/'
@@ -249,6 +302,11 @@ export interface FileRouteTypes {
     | '/pos/settings'
     | '/admin/'
     | '/pos/'
+    | '/admin/user/events'
+    | '/admin/user/peserta'
+    | '/admin/user/reports'
+    | '/admin/user/volunteer'
+    | '/admin/user/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -396,8 +454,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAccountsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/user/': {
+      id: '/admin/user/'
+      path: '/'
+      fullPath: '/admin/user/'
+      preLoaderRoute: typeof AdminUserIndexRouteImport
+      parentRoute: typeof AdminUserRoute
+    }
+    '/admin/user/volunteer': {
+      id: '/admin/user/volunteer'
+      path: '/volunteer'
+      fullPath: '/admin/user/volunteer'
+      preLoaderRoute: typeof AdminUserVolunteerRouteImport
+      parentRoute: typeof AdminUserRoute
+    }
+    '/admin/user/reports': {
+      id: '/admin/user/reports'
+      path: '/reports'
+      fullPath: '/admin/user/reports'
+      preLoaderRoute: typeof AdminUserReportsRouteImport
+      parentRoute: typeof AdminUserRoute
+    }
+    '/admin/user/peserta': {
+      id: '/admin/user/peserta'
+      path: '/peserta'
+      fullPath: '/admin/user/peserta'
+      preLoaderRoute: typeof AdminUserPesertaRouteImport
+      parentRoute: typeof AdminUserRoute
+    }
+    '/admin/user/events': {
+      id: '/admin/user/events'
+      path: '/events'
+      fullPath: '/admin/user/events'
+      preLoaderRoute: typeof AdminUserEventsRouteImport
+      parentRoute: typeof AdminUserRoute
+    }
   }
 }
+
+interface AdminUserRouteChildren {
+  AdminUserEventsRoute: typeof AdminUserEventsRoute
+  AdminUserPesertaRoute: typeof AdminUserPesertaRoute
+  AdminUserReportsRoute: typeof AdminUserReportsRoute
+  AdminUserVolunteerRoute: typeof AdminUserVolunteerRoute
+  AdminUserIndexRoute: typeof AdminUserIndexRoute
+}
+
+const AdminUserRouteChildren: AdminUserRouteChildren = {
+  AdminUserEventsRoute: AdminUserEventsRoute,
+  AdminUserPesertaRoute: AdminUserPesertaRoute,
+  AdminUserReportsRoute: AdminUserReportsRoute,
+  AdminUserVolunteerRoute: AdminUserVolunteerRoute,
+  AdminUserIndexRoute: AdminUserIndexRoute,
+}
+
+const AdminUserRouteWithChildren = AdminUserRoute._addFileChildren(
+  AdminUserRouteChildren,
+)
 
 interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRoute
@@ -405,7 +518,7 @@ interface AdminRouteChildren {
   AdminProductsRoute: typeof AdminProductsRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminUserRoute: typeof AdminUserRoute
+  AdminUserRoute: typeof AdminUserRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -415,7 +528,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminProductsRoute: AdminProductsRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
-  AdminUserRoute: AdminUserRoute,
+  AdminUserRoute: AdminUserRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
 
