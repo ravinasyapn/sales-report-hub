@@ -30,6 +30,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 import { Route as AdminUserIndexRouteImport } from './routes/admin.user.index'
 import { Route as AdminUserVolunteerRouteImport } from './routes/admin.user.volunteer'
+import { Route as AdminUserReportsRouteImport } from './routes/admin.user.reports'
 import { Route as AdminUserPesertaRouteImport } from './routes/admin.user.peserta'
 import { Route as AdminUserEventsRouteImport } from './routes/admin.user.events'
 
@@ -138,6 +139,11 @@ const AdminUserVolunteerRoute = AdminUserVolunteerRouteImport.update({
   path: '/volunteer',
   getParentRoute: () => AdminUserRoute,
 } as any)
+const AdminUserReportsRoute = AdminUserReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AdminUserRoute,
+} as any)
 const AdminUserPesertaRoute = AdminUserPesertaRouteImport.update({
   id: '/peserta',
   path: '/peserta',
@@ -171,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/pos/': typeof PosIndexRoute
   '/admin/user/events': typeof AdminUserEventsRoute
   '/admin/user/peserta': typeof AdminUserPesertaRoute
+  '/admin/user/reports': typeof AdminUserReportsRoute
   '/admin/user/volunteer': typeof AdminUserVolunteerRoute
   '/admin/user/': typeof AdminUserIndexRoute
 }
@@ -193,6 +200,7 @@ export interface FileRoutesByTo {
   '/pos': typeof PosIndexRoute
   '/admin/user/events': typeof AdminUserEventsRoute
   '/admin/user/peserta': typeof AdminUserPesertaRoute
+  '/admin/user/reports': typeof AdminUserReportsRoute
   '/admin/user/volunteer': typeof AdminUserVolunteerRoute
   '/admin/user': typeof AdminUserIndexRoute
 }
@@ -219,6 +227,7 @@ export interface FileRoutesById {
   '/pos/': typeof PosIndexRoute
   '/admin/user/events': typeof AdminUserEventsRoute
   '/admin/user/peserta': typeof AdminUserPesertaRoute
+  '/admin/user/reports': typeof AdminUserReportsRoute
   '/admin/user/volunteer': typeof AdminUserVolunteerRoute
   '/admin/user/': typeof AdminUserIndexRoute
 }
@@ -246,6 +255,7 @@ export interface FileRouteTypes {
     | '/pos/'
     | '/admin/user/events'
     | '/admin/user/peserta'
+    | '/admin/user/reports'
     | '/admin/user/volunteer'
     | '/admin/user/'
   fileRoutesByTo: FileRoutesByTo
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/pos'
     | '/admin/user/events'
     | '/admin/user/peserta'
+    | '/admin/user/reports'
     | '/admin/user/volunteer'
     | '/admin/user'
   id:
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/pos/'
     | '/admin/user/events'
     | '/admin/user/peserta'
+    | '/admin/user/reports'
     | '/admin/user/volunteer'
     | '/admin/user/'
   fileRoutesById: FileRoutesById
@@ -456,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUserVolunteerRouteImport
       parentRoute: typeof AdminUserRoute
     }
+    '/admin/user/reports': {
+      id: '/admin/user/reports'
+      path: '/reports'
+      fullPath: '/admin/user/reports'
+      preLoaderRoute: typeof AdminUserReportsRouteImport
+      parentRoute: typeof AdminUserRoute
+    }
     '/admin/user/peserta': {
       id: '/admin/user/peserta'
       path: '/peserta'
@@ -476,6 +495,7 @@ declare module '@tanstack/react-router' {
 interface AdminUserRouteChildren {
   AdminUserEventsRoute: typeof AdminUserEventsRoute
   AdminUserPesertaRoute: typeof AdminUserPesertaRoute
+  AdminUserReportsRoute: typeof AdminUserReportsRoute
   AdminUserVolunteerRoute: typeof AdminUserVolunteerRoute
   AdminUserIndexRoute: typeof AdminUserIndexRoute
 }
@@ -483,6 +503,7 @@ interface AdminUserRouteChildren {
 const AdminUserRouteChildren: AdminUserRouteChildren = {
   AdminUserEventsRoute: AdminUserEventsRoute,
   AdminUserPesertaRoute: AdminUserPesertaRoute,
+  AdminUserReportsRoute: AdminUserReportsRoute,
   AdminUserVolunteerRoute: AdminUserVolunteerRoute,
   AdminUserIndexRoute: AdminUserIndexRoute,
 }
