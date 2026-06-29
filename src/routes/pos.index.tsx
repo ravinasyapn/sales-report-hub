@@ -72,15 +72,11 @@ function POS() {
       <div className="flex h-[calc(100vh-3.5rem)]">
         {/* Catalog */}
         <div className="flex-1 p-6 overflow-y-auto scroll-pretty bg-pink-soft">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-11 w-11 rounded-xl bg-maroon text-primary-foreground flex items-center justify-center">
-              <ShoppingCart size={20} />
-            </div>
-            <div>
-              <h1 className="font-display text-2xl font-bold text-maroon">Point of Sale</h1>
-              <p className="text-xs text-maroon/70">Pilih produk untuk ditambahkan ke keranjang</p>
-            </div>
+          <div>
+            <h1 className="font-display text-3xl font-bold text-maroon flex items-center gap-2"><ShoppingCart /> Point of Sale</h1>
+            <p className="text-maroon/70 text-sm mt-1">Pilih produk untuk ditambahkan ke keranjang</p>
           </div>
+
 
           <div className="relative mt-4">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-maroon/50 pointer-events-none" />
@@ -116,7 +112,7 @@ function POS() {
         </div>
 
         {/* Cart */}
-        <aside className="w-95 shrink-0 bg-olive flex flex-col h-full">
+        <aside className="w-95 shrink-0 bg-olive-soft flex flex-col h-full">
           <div className="p-5 flex items-center justify-between border-b border-maroon/10">
             <div className="flex items-center gap-2 text-maroon">
               <ShoppingCart size={22} />
@@ -156,7 +152,7 @@ function POS() {
           </div>
 
           {/* Checkout */}
-          <div className="p-4 space-y-3 border-t border-maroon/10 bg-olive">
+          <div className="p-4 space-y-3 border-t border-maroon/10 bg-olive-soft">
             <div>
               <label className="flex items-center gap-1 text-xs text-maroon font-semibold mb-1"><User size={12}/> Nama Pelanggan</label>
               <input value={customer} onChange={(e) => setCustomer(e.target.value)} className="input-pill text-sm py-2" placeholder="Masukkan nama pelanggan" />
@@ -166,11 +162,12 @@ function POS() {
               <div className="grid grid-cols-2 gap-2">
                 {(["Tunai", "QRIS"] as const).map((m) => (
                   <button key={m} onClick={() => setMethod(m)} className={`py-3 rounded-xl font-semibold text-sm ${method === m ? "bg-maroon text-primary-foreground" : "bg-pink-soft text-maroon"}`}>
-                    {m}
+                    {m === "QRIS" ? "Non Tunai" : m}
                   </button>
                 ))}
               </div>
             </div>
+
             {method === "Tunai" && (
               <div>
                 <label className="text-xs text-maroon font-semibold mb-1 block">Uang Diterima</label>

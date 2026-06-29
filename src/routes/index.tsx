@@ -107,12 +107,6 @@ function LoginPage() {
           <button type="submit" disabled={loading} className="w-full btn-olive py-3 text-base font-bold disabled:opacity-50">
             {loading ? "Memproses..." : "Masuk"}
           </button>
-          <p className="text-sm font-semibold text-maroon">
-            Belum punya akun?{" "}
-            <Link to="/register" className="text-pink-deep hover:underline">
-              Daftar
-            </Link>
-          </p>
           <div className="text-[11px] text-maroon/60 text-center space-y-0.5">
             <p>Owner: <span className="font-mono">owner@gurita.com</span> / <span className="font-mono">admin123</span></p>
             <p>Kasir: <span className="font-mono">kasir@gurita.com</span> / <span className="font-mono">kasir123</span></p>
@@ -122,3 +116,4 @@ function LoginPage() {
     </AuthLayout>
   );
 }
+

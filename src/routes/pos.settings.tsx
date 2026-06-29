@@ -29,10 +29,9 @@ function SettingsPage() {
       <div className="p-8 max-w-2xl space-y-6">
         <div>
           <h1 className="font-display text-3xl font-bold text-maroon flex items-center gap-2"><SIcon /> Pengaturan</h1>
-          <p className="text-maroon/70 text-sm mt-1">
-            Data toko diambil dari pengaturan Admin. {owner ? "Anda Owner — perubahan akan ikut tersimpan di panel Admin." : "Anda login sebagai Kasir — hanya bisa melihat."}
-          </p>
+          <p className="text-maroon/70 text-sm mt-1">Kelola informasi toko dan preferensi sistem.</p>
         </div>
+
 
         <div className={`rounded-2xl p-4 border text-sm flex items-start gap-3 ${owner ? "bg-pink-soft border-maroon/20 text-maroon" : "bg-secondary border-border text-maroon"}`}>
           {owner ? <Info size={18} className="mt-0.5" /> : <ShieldAlert size={18} className="mt-0.5" />}

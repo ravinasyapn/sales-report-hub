@@ -106,7 +106,7 @@ export function PosShell({ children }: { children: ReactNode }) {
                     className={`block px-4 py-2 rounded-lg text-sm transition ${
                       active ? "text-maroon font-bold" : "text-maroon/80 hover:text-maroon"
                     }`}
-                  >{s.label}{!owner && s.to === "/pos/products" ? " (lihat saja)" : ""}</Link>
+                  >{s.label}</Link>
                 );
               })}
             </div>
@@ -142,11 +142,8 @@ export function PosShell({ children }: { children: ReactNode }) {
       </aside>
 
       <main className={`flex-1 min-w-0 pt-14 transition-[margin] duration-300 ${sidebarOpen ? "lg:ml-72" : "ml-0"}`}>
-        {usingDummy && (
-          <div className="mx-4 mt-4 bg-pink-soft text-maroon text-xs rounded-xl px-4 py-2 border border-maroon/20">
-            Menggunakan data contoh (backend belum tersedia).
-          </div>
-        )}
+        {usingDummy && null}
+
         {error && !usingDummy && (
           <div className="mx-4 mt-4 bg-destructive/10 text-destructive text-sm rounded-xl px-4 py-2.5 border border-destructive/30">
             Gagal memuat data dari server: {error}
