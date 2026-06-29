@@ -152,7 +152,7 @@ function POS() {
           </div>
 
           {/* Checkout */}
-          <div className="p-4 space-y-3 border-t border-maroon/10 bg-olive">
+          <div className="p-4 space-y-3 border-t border-maroon/10 bg-olive-soft">
             <div>
               <label className="flex items-center gap-1 text-xs text-maroon font-semibold mb-1"><User size={12}/> Nama Pelanggan</label>
               <input value={customer} onChange={(e) => setCustomer(e.target.value)} className="input-pill text-sm py-2" placeholder="Masukkan nama pelanggan" />
@@ -162,11 +162,12 @@ function POS() {
               <div className="grid grid-cols-2 gap-2">
                 {(["Tunai", "QRIS"] as const).map((m) => (
                   <button key={m} onClick={() => setMethod(m)} className={`py-3 rounded-xl font-semibold text-sm ${method === m ? "bg-maroon text-primary-foreground" : "bg-pink-soft text-maroon"}`}>
-                    {m}
+                    {m === "QRIS" ? "Non Tunai" : m}
                   </button>
                 ))}
               </div>
             </div>
+
             {method === "Tunai" && (
               <div>
                 <label className="text-xs text-maroon font-semibold mb-1 block">Uang Diterima</label>
