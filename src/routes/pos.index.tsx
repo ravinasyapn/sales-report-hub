@@ -152,7 +152,7 @@ function POS() {
           </div>
 
           {/* Checkout */}
-          <div className="p-4 space-y-3 border-t border-maroon/10 bg-olive-soft">
+          <div className="p-4 space-y-3 border-t border-maroon/10 bg-cart">
             <div>
               <label className="flex items-center gap-1 text-xs text-maroon font-semibold mb-1"><User size={12}/> Nama Pelanggan</label>
               <input value={customer} onChange={(e) => setCustomer(e.target.value)} className="input-pill text-sm py-2" placeholder="Masukkan nama pelanggan" />
