@@ -55,6 +55,7 @@ function AdminDashboard() {
   const [settings, setSettings] = useState<ApiSettings>({ event_name: "", owner_address: "", owner_phone: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const onlineCashiers = useOnlineCashiers();
 
   useEffect(() => {
     let alive = true;
