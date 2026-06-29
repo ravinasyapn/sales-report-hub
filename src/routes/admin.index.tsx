@@ -16,6 +16,7 @@ import {
   MapPin,
   Phone,
   AlertTriangle,
+  UserCheck,
 } from "lucide-react";
 import {
   BarChart,
