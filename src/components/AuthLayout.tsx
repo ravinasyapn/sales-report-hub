@@ -7,9 +7,10 @@ import { ReactNode } from "react";
 export function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen w-full bg-pink-soft">
-      <div className="min-h-screen w-full grid lg:grid-cols-2 gap-0 items-center px-6 py-10 lg:px-16">
+      <div className="min-h-screen w-full grid lg:grid-cols-2 gap-0 items-center px-6 py-10 lg:px-24 xl:px-32">
         {/* Kiri — Brand */}
-        <div className="flex flex-col justify-center items-start text-left">
+        <div className="flex flex-col justify-center items-start text-left lg:pl-12 xl:pl-20">
+
           <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold text-maroon leading-[0.95] tracking-tight">
             GURITA
             <br />
