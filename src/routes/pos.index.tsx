@@ -112,7 +112,7 @@ function POS() {
         </div>
 
         {/* Cart */}
-        <aside className="w-95 shrink-0 bg-olive flex flex-col h-full">
+        <aside className="w-95 shrink-0 bg-olive-soft flex flex-col h-full">
           <div className="p-5 flex items-center justify-between border-b border-maroon/10">
             <div className="flex items-center gap-2 text-maroon">
               <ShoppingCart size={22} />
