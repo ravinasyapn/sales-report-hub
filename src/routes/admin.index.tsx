@@ -147,10 +147,10 @@ function AdminDashboard() {
           sub={topProduct ? `${topProduct.total_terjual} terjual` : "Belum ada penjualan"}
         />
         <StatCard
-          icon={AlertTriangle}
-          label="Stok Menipis"
-          value={loading ? "…" : `${lowStock.length} produk`}
-          sub={lowStock.length ? lowStock.slice(0, 2).map((p) => p.nama_produk).join(" · ") : "Stok aman"}
+          icon={UserCheck}
+          label="Kasir Aktif"
+          value={loading ? "…" : `${onlineCashiers.length} kasir`}
+          sub={onlineCashiers.length ? onlineCashiers.slice(0, 2).map((c) => c.name.split(" ")[0]).join(" · ") : "Belum ada kasir online"}
         />
       </section>
 
