@@ -227,15 +227,6 @@ function AdminLayout() {
     </aside>
   );
 
-  // Admin User module renders its own full layout (own sidebar, own header)
-  if (path.startsWith("/admin/user")) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Outlet />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen flex bg-background">
       {mobileOpen && (
