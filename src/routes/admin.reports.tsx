@@ -304,8 +304,8 @@ function ReportsPage() {
       {/* ============ Page header ============ */}
       <header className="flex flex-wrap items-end justify-between gap-4 print:hidden">
         <div className="space-y-2">
-          <div className="text-[10px] uppercase tracking-[0.22em] font-bold text-accent/70 flex items-center gap-2">
-            <FileBarChart className="w-3 h-3" /> Laporan
+          <div className="text-[10px] uppercase tracking-[0.22em] font-bold text-accent/70">
+            Laporan
           </div>
           <h1 className="font-serif italic text-4xl sm:text-5xl font-extrabold text-accent leading-tight">
             Laporan Penjualan
