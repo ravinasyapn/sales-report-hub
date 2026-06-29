@@ -209,6 +209,7 @@ html {
 .bg-maroon { background-color: var(--maroon); }
 .bg-olive { background-color: var(--olive); }
 .bg-olive-soft { background-color: color-mix(in oklab, var(--olive) 25%, white); }
+.bg-cart { background-color: color-mix(in oklab, var(--pink-soft) 38%, oklch(0.985 0.02 90)); }
 
 .text-olive { color: var(--olive); }
 .text-olive-foreground { color: var(--olive-foreground); }
