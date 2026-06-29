@@ -156,7 +156,7 @@ function History() {
             <div className="text-xs space-y-1 text-maroon mb-3">
               <div className="flex justify-between"><span>Tanggal</span><span>{new Date(selected.date).toLocaleString("id-ID")}</span></div>
               <div className="flex justify-between"><span>Pelanggan</span><span>{selected.customer}</span></div>
-              <div className="flex justify-between"><span>Metode</span><span>{selected.method}</span></div>
+              <div className="flex justify-between"><span>Metode</span><span>{selected.method === "QRIS" ? "Non Tunai" : selected.method}</span></div>
               <div className="flex justify-between"><span>Kasir</span><span className="font-semibold">{selected.cashier_name || "Kasir"}</span></div>
             </div>
             <div className="border-t border-dashed border-border pt-3 space-y-2 text-sm">
