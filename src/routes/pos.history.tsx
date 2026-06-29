@@ -126,7 +126,7 @@ function History() {
                     <td className="p-3 font-mono text-xs">{t.invoice}</td>
                     <td className="p-3 font-semibold">{t.customer}</td>
                     <td className="p-3">{t.items.length} item</td>
-                    <td className="p-3"><span className="text-xs px-2 py-1 rounded-full bg-secondary">{t.method}</span></td>
+                    <td className="p-3"><span className="text-xs px-2 py-1 rounded-full bg-secondary">{t.method === "QRIS" ? "Non Tunai" : t.method}</span></td>
                     <td className="p-3"><span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusStyle}`}>{t.status}</span></td>
                     <td className="p-3">
                       <span className="bg-olive/10 text-olive text-xs px-2.5 py-1 rounded-md font-medium">
