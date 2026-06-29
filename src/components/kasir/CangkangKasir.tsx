@@ -106,7 +106,7 @@ export function PosShell({ children }: { children: ReactNode }) {
                     className={`block px-4 py-2 rounded-lg text-sm transition ${
                       active ? "text-maroon font-bold" : "text-maroon/80 hover:text-maroon"
                     }`}
-                  >{s.label}{!owner && s.to === "/pos/products" ? " (lihat saja)" : ""}</Link>
+                  >{s.label}</Link>
                 );
               })}
             </div>
