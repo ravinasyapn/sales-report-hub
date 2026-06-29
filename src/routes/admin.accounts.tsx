@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { KeyRound, UserPlus, Trash2, Search, ShieldCheck, X, AlertTriangle, Loader2 } from "lucide-react";
+import { UserPlus, Trash2, Search, ShieldCheck, X, AlertTriangle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { penggunaApi, type ApiUser } from "@/lib/kasir";
 
