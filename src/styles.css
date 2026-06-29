@@ -208,6 +208,8 @@ html {
 .text-maroon { color: var(--maroon); }
 .bg-maroon { background-color: var(--maroon); }
 .bg-olive { background-color: var(--olive); }
+.bg-olive-soft { background-color: color-mix(in oklab, var(--olive) 25%, white); }
+
 .text-olive { color: var(--olive); }
 .text-olive-foreground { color: var(--olive-foreground); }
 .border-maroon { border-color: var(--maroon); }
