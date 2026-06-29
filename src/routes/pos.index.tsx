@@ -211,7 +211,7 @@ function ReceiptModal({ tx, onClose }: { tx: any; onClose: () => void }) {
           {/* PERBAIKAN 2: Menampilkan nama kasir di dalam cetak struk modal digital */}
           <div className="flex justify-between"><span>Kasir</span><span className="font-semibold">{tx.cashier_name || "Kasir"}</span></div>
           
-          <div className="flex justify-between"><span>Metode</span><span>{tx.method}</span></div>
+          <div className="flex justify-between"><span>Metode</span><span>{tx.method === "QRIS" ? "Non Tunai" : tx.method}</span></div>
         </div>
         <div className="border-t border-dashed border-border pt-3 space-y-2 text-sm">
           {tx.items.map((i: any, idx: number) => (
