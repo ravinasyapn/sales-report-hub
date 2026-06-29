@@ -13,7 +13,6 @@ import {
   Banknote,
   ClipboardList,
   AlertTriangle,
-  FileBarChart,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/reports")({
