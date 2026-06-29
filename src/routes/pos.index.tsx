@@ -112,7 +112,7 @@ function POS() {
         </div>
 
         {/* Cart */}
-        <aside className="w-95 shrink-0 bg-olive-soft flex flex-col h-full">
+        <aside className="w-95 shrink-0 bg-cart flex flex-col h-full">
           <div className="p-5 flex items-center justify-between border-b border-maroon/10">
             <div className="flex items-center gap-2 text-maroon">
               <ShoppingCart size={22} />
@@ -121,7 +121,7 @@ function POS() {
                 <p className="text-xs">{cart.length} item dipilih</p>
               </div>
             </div>
-            <span className="bg-pink-soft text-maroon font-bold rounded-full h-8 w-8 flex items-center justify-center text-sm">{cart.length}</span>
+            <span className="bg-card text-maroon font-bold rounded-full h-8 w-8 flex items-center justify-center text-sm shadow-sm">{cart.length}</span>
           </div>
 
           {/* Scrollable items */}
@@ -152,7 +152,7 @@ function POS() {
           </div>
 
           {/* Checkout */}
-          <div className="p-4 space-y-3 border-t border-maroon/10 bg-olive-soft">
+          <div className="p-4 space-y-3 border-t border-maroon/10 bg-cart">
             <div>
               <label className="flex items-center gap-1 text-xs text-maroon font-semibold mb-1"><User size={12}/> Nama Pelanggan</label>
               <input value={customer} onChange={(e) => setCustomer(e.target.value)} className="input-pill text-sm py-2" placeholder="Masukkan nama pelanggan" />
@@ -180,7 +180,7 @@ function POS() {
               <span className="font-display font-bold text-xl text-maroon">{formatIDR(subtotal)}</span>
             </div>
             {payError && <p className="text-xs text-destructive">{payError}</p>}
-            <button disabled={!canPay || submitting} onClick={process} className="w-full py-3 rounded-full font-bold bg-pink-soft text-maroon disabled:opacity-50">
+            <button disabled={!canPay || submitting} onClick={process} className="w-full py-3 rounded-full font-bold bg-maroon text-primary-foreground disabled:opacity-50 hover:opacity-90 transition shadow-md">
               {submitting ? "Memproses..." : "Proses Pembayaran"}
             </button>
           </div>
@@ -211,7 +211,7 @@ function ReceiptModal({ tx, onClose }: { tx: any; onClose: () => void }) {
           {/* PERBAIKAN 2: Menampilkan nama kasir di dalam cetak struk modal digital */}
           <div className="flex justify-between"><span>Kasir</span><span className="font-semibold">{tx.cashier_name || "Kasir"}</span></div>
           
-          <div className="flex justify-between"><span>Metode</span><span>{tx.method}</span></div>
+          <div className="flex justify-between"><span>Metode</span><span>{tx.method === "QRIS" ? "Non Tunai" : tx.method}</span></div>
         </div>
         <div className="border-t border-dashed border-border pt-3 space-y-2 text-sm">
           {tx.items.map((i: any, idx: number) => (

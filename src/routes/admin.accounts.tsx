@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { KeyRound, UserPlus, Trash2, Search, ShieldCheck, X, AlertTriangle, Loader2 } from "lucide-react";
+import { UserPlus, Trash2, Search, ShieldCheck, X, AlertTriangle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { penggunaApi, type ApiUser } from "@/lib/kasir";
 
@@ -83,8 +83,8 @@ function AccountsPage() {
   return (
     <div className="p-5 sm:p-8 lg:p-12 max-w-6xl mx-auto space-y-8">
       <header className="space-y-2">
-        <div className="text-[10px] uppercase tracking-[0.22em] font-bold text-accent/70 flex items-center gap-2">
-          <KeyRound className="w-3 h-3" /> Manajemen
+        <div className="text-[10px] uppercase tracking-[0.22em] font-bold text-accent/70">
+          Manajemen
         </div>
         <h1 className="font-serif italic text-4xl sm:text-5xl font-extrabold text-accent leading-tight">
           Manajemen Akun
@@ -96,7 +96,7 @@ function AccountsPage() {
         <div className="pt-2">
           <button
             onClick={() => setOpenForm(true)}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-accent text-accent-foreground font-bold text-sm shadow-md hover:opacity-90 transition"
           >
             <UserPlus className="w-4 h-4" /> Daftarkan Kasir Baru
           </button>

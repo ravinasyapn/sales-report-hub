@@ -16,6 +16,7 @@ import {
   MapPin,
   Phone,
   AlertTriangle,
+  UserCheck,
 } from "lucide-react";
 import {
   BarChart,
@@ -29,6 +30,7 @@ import {
 } from "recharts";
 import { useAdminRole } from "@/hooks/use-admin-role";
 import { laporanApi, pengaturanApi, type DashboardData, type PenjualanData, type ApiSettings } from "@/lib/kasir";
+import { useOnlineCashiers } from "@/hooks/use-online-cashiers";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
@@ -53,6 +55,7 @@ function AdminDashboard() {
   const [settings, setSettings] = useState<ApiSettings>({ event_name: "", owner_address: "", owner_phone: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const onlineCashiers = useOnlineCashiers();
 
   useEffect(() => {
     let alive = true;
@@ -129,7 +132,7 @@ function AdminDashboard() {
           icon={Wallet}
           label="Omzet Hari Ini"
           value={loading ? "…" : fmtIDR(dash?.omzet_hari_ini ?? 0)}
-          sub={`Tunai ${fmtIDR(dash?.omzet_tunai ?? 0)} · QRIS ${fmtIDR(dash?.omzet_qris ?? 0)}`}
+          sub={`Tunai ${fmtIDR(dash?.omzet_tunai ?? 0)} · Non Tunai ${fmtIDR(dash?.omzet_qris ?? 0)}`}
         />
         <StatCard
           icon={Receipt}
@@ -144,10 +147,10 @@ function AdminDashboard() {
           sub={topProduct ? `${topProduct.total_terjual} terjual` : "Belum ada penjualan"}
         />
         <StatCard
-          icon={AlertTriangle}
-          label="Stok Menipis"
-          value={loading ? "…" : `${lowStock.length} produk`}
-          sub={lowStock.length ? lowStock.slice(0, 2).map((p) => p.nama_produk).join(" · ") : "Stok aman"}
+          icon={UserCheck}
+          label="Kasir Aktif"
+          value={loading ? "…" : `${onlineCashiers.length} kasir`}
+          sub={onlineCashiers.length ? onlineCashiers.slice(0, 2).map((c) => c.name.split(" ")[0]).join(" · ") : "Belum ada kasir online"}
         />
       </section>
 
