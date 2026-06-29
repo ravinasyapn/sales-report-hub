@@ -132,7 +132,7 @@ function AdminDashboard() {
           icon={Wallet}
           label="Omzet Hari Ini"
           value={loading ? "…" : fmtIDR(dash?.omzet_hari_ini ?? 0)}
-          sub={`Tunai ${fmtIDR(dash?.omzet_tunai ?? 0)} · QRIS ${fmtIDR(dash?.omzet_qris ?? 0)}`}
+          sub={`Tunai ${fmtIDR(dash?.omzet_tunai ?? 0)} · Non Tunai ${fmtIDR(dash?.omzet_qris ?? 0)}`}
         />
         <StatCard
           icon={Receipt}
