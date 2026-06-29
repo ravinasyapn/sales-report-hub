@@ -72,15 +72,11 @@ function POS() {
       <div className="flex h-[calc(100vh-3.5rem)]">
         {/* Catalog */}
         <div className="flex-1 p-6 overflow-y-auto scroll-pretty bg-pink-soft">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-11 w-11 rounded-xl bg-maroon text-primary-foreground flex items-center justify-center">
-              <ShoppingCart size={20} />
-            </div>
-            <div>
-              <h1 className="font-display text-2xl font-bold text-maroon">Point of Sale</h1>
-              <p className="text-xs text-maroon/70">Pilih produk untuk ditambahkan ke keranjang</p>
-            </div>
+          <div>
+            <h1 className="font-display text-3xl font-bold text-maroon flex items-center gap-2"><ShoppingCart /> Point of Sale</h1>
+            <p className="text-maroon/70 text-sm mt-1">Pilih produk untuk ditambahkan ke keranjang</p>
           </div>
+
 
           <div className="relative mt-4">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-maroon/50 pointer-events-none" />
