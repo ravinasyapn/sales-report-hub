@@ -112,7 +112,7 @@ function POS() {
         </div>
 
         {/* Cart */}
-        <aside className="w-95 shrink-0 bg-olive-soft flex flex-col h-full">
+        <aside className="w-95 shrink-0 bg-cart flex flex-col h-full">
           <div className="p-5 flex items-center justify-between border-b border-maroon/10">
             <div className="flex items-center gap-2 text-maroon">
               <ShoppingCart size={22} />
@@ -121,7 +121,7 @@ function POS() {
                 <p className="text-xs">{cart.length} item dipilih</p>
               </div>
             </div>
-            <span className="bg-pink-soft text-maroon font-bold rounded-full h-8 w-8 flex items-center justify-center text-sm">{cart.length}</span>
+            <span className="bg-card text-maroon font-bold rounded-full h-8 w-8 flex items-center justify-center text-sm shadow-sm">{cart.length}</span>
           </div>
 
           {/* Scrollable items */}
