@@ -96,7 +96,7 @@ function AccountsPage() {
         <div className="pt-2">
           <button
             onClick={() => setOpenForm(true)}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-accent text-accent-foreground font-bold text-sm shadow-md hover:opacity-90 transition"
           >
             <UserPlus className="w-4 h-4" /> Daftarkan Kasir Baru
           </button>
