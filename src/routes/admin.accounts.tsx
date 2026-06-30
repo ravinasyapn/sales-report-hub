@@ -241,7 +241,7 @@ function AccountsPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full mt-1 py-2 rounded-lg bg-primary text-primary-foreground font-bold shadow hover:opacity-90 transition disabled:opacity-60 text-sm"
+                className="w-full mt-1 py-2 rounded-lg bg-accent text-accent-foreground font-bold shadow hover:opacity-90 transition disabled:opacity-60 text-sm"
               >
                 {submitting ? "Menyimpan…" : "Buat Akun Kasir"}
               </button>
