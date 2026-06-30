@@ -207,6 +207,11 @@ html {
   --color-cream: var(--cream);
 }
 
+.bg-cream { background-color: var(--cream); }
+.text-cream { color: var(--cream); }
+.border-cream { border-color: var(--cream); }
+
+
 
 .bg-pink-soft { background-color: var(--pink-soft); }
 .bg-pink-deep { background-color: var(--pink-deep); }
