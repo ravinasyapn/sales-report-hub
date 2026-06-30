@@ -112,17 +112,18 @@ function POS() {
         </div>
 
         {/* Cart */}
-        <aside className="w-95 shrink-0 bg-cart flex flex-col h-full">
-          <div className="p-5 flex items-center justify-between border-b border-maroon/10">
-            <div className="flex items-center gap-2 text-maroon">
+        <aside className="w-95 shrink-0 bg-maroon text-cream flex flex-col h-full">
+          <div className="p-5 flex items-center justify-between border-b border-cream/15">
+            <div className="flex items-center gap-2 text-cream">
               <ShoppingCart size={22} />
               <div>
                 <h2 className="font-display font-bold text-lg leading-tight">Keranjang Belanja</h2>
-                <p className="text-xs">{cart.length} item dipilih</p>
+                <p className="text-xs opacity-80">{cart.length} item dipilih</p>
               </div>
             </div>
             <span className="bg-card text-maroon font-bold rounded-full h-8 w-8 flex items-center justify-center text-sm shadow-sm">{cart.length}</span>
           </div>
+
 
           {/* Scrollable items */}
           <div className="flex-1 overflow-y-auto scroll-pretty p-4 space-y-3">
