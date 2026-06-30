@@ -117,15 +117,11 @@ function AddCategoryModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <form onSubmit={submit} onClick={(e) => e.stopPropagation()} className="bg-card rounded-3xl p-6 w-full max-w-sm space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="h-12 w-12 rounded-xl bg-pink-soft flex items-center justify-center text-maroon">
-            <Boxes size={20} />
-          </div>
-          <div>
-            <h3 className="font-display text-xl font-bold text-maroon">Tambah Kategori</h3>
-            <p className="text-xs text-maroon/60">Buat kategori produk baru</p>
-          </div>
+        <div>
+          <h3 className="font-display text-xl font-bold text-maroon">Tambah Kategori</h3>
+          <p className="text-xs text-maroon/60">Buat kategori produk baru</p>
         </div>
+
         <div>
           <label className="text-sm font-semibold text-maroon">Nama Kategori</label>
           <input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder="Misal: Bunga, Wrapping, Aksesoris" className="input-pill mt-1" required />
