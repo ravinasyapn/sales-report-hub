@@ -12,7 +12,7 @@
  * ============================================================================
  */
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { Home, Package, History, Settings as SettingsIcon, ChevronDown, LogOut, Menu, X, ShieldCheck } from "lucide-react";
+import { Home, Package, History, Settings as SettingsIcon, ChevronDown, LogOut, Menu, X, ArrowLeft } from "lucide-react";
 import { useState, useEffect, type ReactNode } from "react";
 import logo from "@/assets/pos-logo.jpeg";
 import { actions, useStore, getCurrentUser, isOwner } from "@/lib/kasir";
@@ -129,9 +129,9 @@ export function PosShell({ children }: { children: ReactNode }) {
           {owner && (
             <Link
               to="/admin"
-              className="mb-2 flex items-center gap-3 px-5 py-3 rounded-full bg-secondary text-maroon hover:bg-secondary/80 text-sm font-semibold transition"
+              className="flex items-center gap-3 px-5 py-3 rounded-full text-maroon hover:bg-secondary text-sm font-semibold transition"
             >
-              <ShieldCheck size={18} /> Kembali ke Admin
+              <ArrowLeft size={18} /> Kembali ke Admin
             </Link>
           )}
           <a href="/" onClick={handleLogout}

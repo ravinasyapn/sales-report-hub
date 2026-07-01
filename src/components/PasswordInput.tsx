@@ -9,7 +9,7 @@ export function PasswordInput(props: React.InputHTMLAttributes<HTMLInputElement>
       <button
         type="button"
         onClick={() => setShow((s) => !s)}
-        className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90"
+        className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-maroon px-4 py-1.5 text-xs font-semibold text-white hover:opacity-90"
       >
         {show ? "Sembunyikan" : "Tampilkan"}
       </button>

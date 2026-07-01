@@ -221,7 +221,20 @@ html {
 }
 
 .btn-olive {
-  background-color: var(--olive);
+  background-color: var(--maroon);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.65rem 1.5rem;
+  transition: filter .2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-olive:hover { filter: brightness(1.1); }
+
+.btn-pink {
+  background-color: var(--pink-soft);
   color: var(--maroon);
   font-weight: 600;
   border-radius: 9999px;
@@ -231,7 +244,7 @@ html {
   align-items: center;
   justify-content: center;
 }
-.btn-olive:hover { filter: brightness(0.95); }
+.btn-pink:hover { filter: brightness(0.97); }
 
 .btn-maroon {
   background-color: var(--maroon);
