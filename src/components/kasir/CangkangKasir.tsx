@@ -12,7 +12,7 @@
  * ============================================================================
  */
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { Home, Package, History, Settings as SettingsIcon, ChevronDown, LogOut, Menu, X, ShieldCheck } from "lucide-react";
+import { Home, Package, History, Settings as SettingsIcon, ChevronDown, LogOut, Menu, X, ArrowLeft } from "lucide-react";
 import { useState, useEffect, type ReactNode } from "react";
 import logo from "@/assets/pos-logo.jpeg";
 import { actions, useStore, getCurrentUser, isOwner } from "@/lib/kasir";
