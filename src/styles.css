@@ -198,20 +198,9 @@ html {
   --maroon: oklch(0.38 0.11 25);
   --olive: oklch(0.65 0.08 110);
   --olive-foreground: oklch(0.32 0.09 25);
-  --cream: oklch(0.98 0.025 105);
   --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
   --font-sans-pos: "Poppins", system-ui, sans-serif;
 }
-
-@theme {
-  --color-cream: var(--cream);
-}
-
-.bg-cream { background-color: var(--cream); }
-.text-cream { color: var(--cream); }
-.border-cream { border-color: var(--cream); }
-
-
 
 .bg-pink-soft { background-color: var(--pink-soft); }
 .bg-pink-deep { background-color: var(--pink-deep); }

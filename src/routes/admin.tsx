@@ -228,7 +228,7 @@ function AdminLayout() {
   );
 
   return (
-    <div className="min-h-screen flex bg-card">
+    <div className="min-h-screen flex bg-background">
       {mobileOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-30 lg:hidden"

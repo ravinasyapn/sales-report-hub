@@ -364,12 +364,11 @@ function ReportsPage() {
         />
         <StatCard
           icon={QrCode}
-          label="Total Non Tunai"
+          label="Total QRIS"
           value={fmt(totals.qris)}
           hint={pct(totals.qris, totals.omzet)}
           tone="blue"
         />
-
       </section>
 
       {/* ============ Filter bar ============ */}
@@ -410,7 +409,7 @@ function ReportsPage() {
               <TH>{mode === "event" ? "Keterangan" : "Keterangan"}</TH>
               <TH className="text-right">Transaksi</TH>
               <TH className="text-right">Tunai</TH>
-              <TH className="text-right">Non Tunai</TH>
+              <TH className="text-right">QRIS</TH>
               <TH className="text-right">Total</TH>
             </TR>
           </THead>

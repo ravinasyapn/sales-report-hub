@@ -112,22 +112,21 @@ function POS() {
         </div>
 
         {/* Cart */}
-        <aside className="w-95 shrink-0 bg-maroon text-cream flex flex-col h-full">
-          <div className="p-5 flex items-center justify-between border-b border-cream/15">
-            <div className="flex items-center gap-2 text-cream">
+        <aside className="w-95 shrink-0 bg-cart flex flex-col h-full">
+          <div className="p-5 flex items-center justify-between border-b border-maroon/10">
+            <div className="flex items-center gap-2 text-maroon">
               <ShoppingCart size={22} />
               <div>
                 <h2 className="font-display font-bold text-lg leading-tight">Keranjang Belanja</h2>
-                <p className="text-xs opacity-80">{cart.length} item dipilih</p>
+                <p className="text-xs">{cart.length} item dipilih</p>
               </div>
             </div>
             <span className="bg-card text-maroon font-bold rounded-full h-8 w-8 flex items-center justify-center text-sm shadow-sm">{cart.length}</span>
           </div>
 
-
           {/* Scrollable items */}
           <div className="flex-1 overflow-y-auto scroll-pretty p-4 space-y-3">
-            {detailed.length === 0 && <p className="text-center text-cream/70 text-sm py-8">Keranjang masih kosong</p>}
+            {detailed.length === 0 && <p className="text-center text-maroon/60 text-sm py-8">Keranjang masih kosong</p>}
             {detailed.map((d) => (
               <div key={d.productId} className="bg-card rounded-xl p-3 flex gap-3 items-center">
                 <img src={d.product.image} className="h-12 w-12 rounded-lg object-cover" alt="" />
@@ -153,16 +152,16 @@ function POS() {
           </div>
 
           {/* Checkout */}
-          <div className="p-4 space-y-3 border-t border-cream/15 bg-maroon text-cream">
+          <div className="p-4 space-y-3 border-t border-maroon/10 bg-cart">
             <div>
-              <label className="flex items-center gap-1 text-xs text-cream font-semibold mb-1"><User size={12}/> Nama Pelanggan</label>
+              <label className="flex items-center gap-1 text-xs text-maroon font-semibold mb-1"><User size={12}/> Nama Pelanggan</label>
               <input value={customer} onChange={(e) => setCustomer(e.target.value)} className="input-pill text-sm py-2" placeholder="Masukkan nama pelanggan" />
             </div>
             <div>
-              <label className="text-xs text-cream font-semibold mb-1 block">Metode Pembayaran</label>
+              <label className="text-xs text-maroon font-semibold mb-1 block">Metode Pembayaran</label>
               <div className="grid grid-cols-2 gap-2">
                 {(["Tunai", "QRIS"] as const).map((m) => (
-                  <button key={m} onClick={() => setMethod(m)} className={`py-3 rounded-xl font-semibold text-sm transition ${method === m ? "bg-cream text-maroon shadow" : "bg-maroon/40 text-cream border border-cream/30 hover:bg-maroon/60"}`}>
+                  <button key={m} onClick={() => setMethod(m)} className={`py-3 rounded-xl font-semibold text-sm ${method === m ? "bg-maroon text-primary-foreground" : "bg-pink-soft text-maroon"}`}>
                     {m === "QRIS" ? "Non Tunai" : m}
                   </button>
                 ))}
@@ -171,19 +170,18 @@ function POS() {
 
             {method === "Tunai" && (
               <div>
-                <label className="text-xs text-cream font-semibold mb-1 block">Uang Diterima</label>
+                <label className="text-xs text-maroon font-semibold mb-1 block">Uang Diterima</label>
                 <input inputMode="numeric" value={paid} onChange={(e) => setPaid(e.target.value.replace(/\D/g, ""))} className="input-pill text-sm py-2" placeholder="Masukkan jumlah uang" />
-                {paidNum > 0 && <p className="text-[11px] text-cream mt-1">Kembalian: <b>{formatIDR(change)}</b></p>}
+                {paidNum > 0 && <p className="text-[11px] text-maroon mt-1">Kembalian: <b>{formatIDR(change)}</b></p>}
               </div>
             )}
             <div className="flex justify-between items-center pt-2">
-              <span className="font-bold text-cream">Total Tagihan</span>
-              <span className="font-display font-bold text-xl text-cream">{formatIDR(subtotal)}</span>
+              <span className="font-bold text-maroon">Total Tagihan</span>
+              <span className="font-display font-bold text-xl text-maroon">{formatIDR(subtotal)}</span>
             </div>
-            {payError && <p className="text-xs text-destructive bg-cream/90 rounded px-2 py-1">{payError}</p>}
-            <button disabled={!canPay || submitting} onClick={process} className="w-full py-3 rounded-full font-bold bg-cream text-maroon disabled:opacity-50 hover:opacity-90 transition shadow-md">
+            {payError && <p className="text-xs text-destructive">{payError}</p>}
+            <button disabled={!canPay || submitting} onClick={process} className="w-full py-3 rounded-full font-bold bg-maroon text-primary-foreground disabled:opacity-50 hover:opacity-90 transition shadow-md">
               {submitting ? "Memproses..." : "Proses Pembayaran"}
-
             </button>
           </div>
         </aside>
