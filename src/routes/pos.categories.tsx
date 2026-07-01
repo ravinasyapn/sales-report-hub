@@ -51,7 +51,7 @@ function Categories() {
                   {editing ? (
                     <>
                       <button onClick={async () => { try { await actions.updateCategory(c.id, editName); setEditId(null); } catch (e: any) { alert(e?.message ?? "Gagal menyimpan"); } }} className="btn-maroon py-1.5 px-4 text-xs">Simpan</button>
-                      <button onClick={() => setEditId(null)} className="btn-olive py-1.5 px-4 text-xs">Batal</button>
+                      <button onClick={() => setEditId(null)} className="btn-pink py-1.5 px-4 text-xs">Batal</button>
                     </>
                   ) : (
                     <>
@@ -89,7 +89,7 @@ function Categories() {
               Kategori <span className="font-semibold">"{deleteTarget.name}"</span> beserta semua produk di dalamnya akan dihapus.
             </p>
             <div className="flex gap-2 pt-5">
-              <button onClick={() => setDeleteTarget(null)} className="btn-olive flex-1">Batal</button>
+              <button onClick={() => setDeleteTarget(null)} className="btn-pink flex-1">Batal</button>
               <button
                 onClick={async () => { try { await actions.deleteCategory(deleteTarget.id); setDeleteTarget(null); } catch (e: any) { alert(e?.message ?? "Gagal menghapus"); } }}
                 className="flex-1 bg-destructive text-destructive-foreground rounded-full py-2.5 font-semibold"
@@ -131,7 +131,7 @@ function AddCategoryModal({ onClose }: { onClose: () => void }) {
           <input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder="Misal: Bunga, Wrapping, Aksesoris" className="input-pill mt-1" required />
         </div>
         <div className="flex gap-2 pt-1">
-          <button type="button" onClick={onClose} className="btn-olive flex-1">Batal</button>
+          <button type="button" onClick={onClose} className="btn-pink flex-1">Batal</button>
           <button type="submit" className="btn-maroon flex-1">Simpan</button>
         </div>
       </form>

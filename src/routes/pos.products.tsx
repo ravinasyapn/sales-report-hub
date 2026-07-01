@@ -131,7 +131,7 @@ function Products() {
               Produk <span className="font-semibold">"{deleteTarget.name}"</span> akan dihapus secara permanen.
             </p>
             <div className="flex gap-2 pt-5">
-              <button onClick={() => setDeleteTarget(null)} className="btn-olive flex-1">Batal</button>
+              <button onClick={() => setDeleteTarget(null)} className="btn-pink flex-1">Batal</button>
               <button
                 onClick={async () => { try { await actions.deleteProduct(deleteTarget.id); setDeleteTarget(null); } catch (e: any) { alert(e?.message ?? "Gagal menghapus"); } }}
                 className="flex-1 bg-destructive text-destructive-foreground rounded-full py-2.5 font-semibold"
@@ -190,7 +190,7 @@ function ProductModal({ initial, onClose }: { initial: Product | null; onClose: 
         <div><label className="text-sm font-semibold text-maroon">URL Gambar</label><input className="input-pill mt-1" value={image} onChange={(e) => setImage(e.target.value)} /></div>
         <img src={image} alt="" className="w-full h-32 object-cover rounded-xl" />
         <div className="flex gap-2 pt-2">
-          <button type="button" onClick={onClose} className="btn-olive flex-1">Batal</button>
+          <button type="button" onClick={onClose} className="btn-pink flex-1">Batal</button>
           <button type="submit" className="btn-maroon flex-1">Simpan</button>
         </div>
       </form>
