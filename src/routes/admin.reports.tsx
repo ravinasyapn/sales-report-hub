@@ -312,11 +312,6 @@ function ReportsPage() {
           <p className="text-sm text-foreground/70 max-w-xl">
             Audit kas, rekap event, dan restock produk — Gurita Bouquet.
           </p>
-          {usingDummy && (
-            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 inline-block">
-              Menampilkan data contoh — backend belum mengirim data (tambahkan produk &amp; transaksi asli untuk data nyata).
-            </p>
-          )}
         </div>
         <button
           onClick={handlePrint}
@@ -364,7 +359,7 @@ function ReportsPage() {
         />
         <StatCard
           icon={QrCode}
-          label="Total QRIS"
+          label="Total Non Tunai"
           value={fmt(totals.qris)}
           hint={pct(totals.qris, totals.omzet)}
           tone="blue"
@@ -409,7 +404,7 @@ function ReportsPage() {
               <TH>{mode === "event" ? "Keterangan" : "Keterangan"}</TH>
               <TH className="text-right">Transaksi</TH>
               <TH className="text-right">Tunai</TH>
-              <TH className="text-right">QRIS</TH>
+              <TH className="text-right">Non Tunai</TH>
               <TH className="text-right">Total</TH>
             </TR>
           </THead>
@@ -525,7 +520,7 @@ function ReportsPage() {
       {/* ============ Rekap produk (restock) ============ */}
       <Section
         icon={Package}
-        title="Rekap Produk Terjual (Kebutuhan Restock)"
+        title="Rekap Produk Terjual"
         sub="Urut berdasarkan kuantitas terjual — gunakan sebagai acuan order ulang stok."
       >
         <Table>

@@ -78,7 +78,7 @@ function History() {
               <p className="text-sm text-maroon/70 mb-3">Metode Pembayaran</p>
               <div className="flex gap-6">
                 <div><p className="text-xs text-maroon/70">Tunai</p><p className="text-lg font-bold text-maroon">{methodCounts["Tunai"] || 0}</p></div>
-                <div><p className="text-xs text-maroon/70">Non Tunai</p><p className="text-lg font-bold text-maroon">{methodCounts["QRIS"] || 0}</p></div>
+                <div><p className="text-xs text-maroon/70">Non Tunai</p><p className="text-lg font-bold text-maroon">{(methodCounts["QRIS"] || 0) + (methodCounts["Non Tunai"] || 0)}</p></div>
               </div>
             </div>
             <div className="bg-card rounded-2xl p-5">

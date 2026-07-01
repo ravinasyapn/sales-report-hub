@@ -121,11 +121,6 @@ function AdminDashboard() {
         </p>
       </header>
 
-      {error && (
-        <div className="flex items-start gap-2 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 px-3 py-2 text-sm">
-          <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" /> {error}
-        </div>
-      )}
 
       <section className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
         <StatCard

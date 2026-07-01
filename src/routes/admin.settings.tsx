@@ -85,7 +85,7 @@ function SettingsPage() {
           Event & Identitas Owner
         </h1>
         <p className="text-sm text-foreground/70">
-          Mode Hibrida — pilih dari jadwal otomatis atau isi manual di lapangan.
+          Pilih dari jadwal atau isi manual di lapangan.
         </p>
       </header>
 
@@ -100,14 +100,14 @@ function SettingsPage() {
               Pilih Event
             </h2>
             <p className="text-xs text-foreground/65 mt-0.5">
-              Otomatis tarik dari jadwal sistem teman, atau isi manual sebagai cadangan tanpa koneksi.
+              Pilih event dari daftar, atau isi manual sebagai cadangan tanpa koneksi.
             </p>
           </div>
         </div>
 
         <div>
           <span className="block text-[11px] uppercase tracking-[0.18em] font-bold text-accent/80 mb-2">
-            Jadwal Tersinkron (Sistem Teman)
+            Jadwal Tersinkron
           </span>
           <select
             value={presetId}
