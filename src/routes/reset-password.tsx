@@ -49,7 +49,7 @@ function ResetPage() {
         </div>
         {err && <p className="text-sm text-destructive text-center">{err}</p>}
         <div className="flex justify-center pt-2">
-          <button className="rounded-full bg-primary px-12 py-3 font-bold text-primary-foreground shadow-md hover:opacity-90">
+          <button className="rounded-full bg-maroon px-12 py-3 font-bold text-white shadow-md hover:opacity-90">
             Ubah Password
           </button>
         </div>

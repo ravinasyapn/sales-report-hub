@@ -26,8 +26,8 @@ function Categories() {
           
           {/* FIX 1: Tombol Tambah Kategori hanya muncul jika user adalah Owner */}
           {currentUser.role === 'owner' && (
-            <button onClick={() => setOpenAdd(true)} className="btn-maroon flex items-center gap-2">
-              <Plus size={18}/> Tambah Kategori
+            <button onClick={() => setOpenAdd(true)} className="btn-maroon">
+              Tambah Kategori
             </button>
           )}
         </div>
